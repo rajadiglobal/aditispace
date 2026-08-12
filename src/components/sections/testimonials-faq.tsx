@@ -1,58 +1,46 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, ChevronDown } from "lucide-react";
+import { Star, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 
 const testimonials = [
   {
     name: "Sarah Jenkins",
-    role: "Homeowner, Modern Villa",
-    content: "AVYRON transformed our vision into reality. The attention to detail and the sheer luxury of the materials they curated exceeded all our expectations. It truly feels like a 5-star hotel.",
+    role: "Complete Home Interiors",
+    content: "The entire process was smooth, from design consultation to final execution. The team understood exactly what we wanted and delivered a beautiful home.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2000&auto=format&fit=crop"
+    image: "/images/testimonials/avatar1.jpg"
   },
   {
     name: "Michael Chen",
-    role: "CEO, TechFlow",
-    content: "The office redesign they executed for our headquarters was spectacular. Not only does it reflect our brand perfectly, but employee productivity and morale have noticeably improved.",
+    role: "Modular Kitchen",
+    content: "We are thrilled with our new modular kitchen. The quality of materials and the space optimization is simply brilliant. Highly recommended!",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=2000&auto=format&fit=crop"
+    image: "/images/testimonials/avatar2.jpg"
   },
   {
     name: "Emma Thompson",
-    role: "Restaurant Owner",
-    content: "Our new restaurant design is a masterpiece. The ambiance AVYRON created has become the talk of the town and our bookings have doubled since the reopening.",
+    role: "Living Room & Wardrobes",
+    content: "Professional, on-time, and transparent. Their 3D designs gave us a clear picture, and the final execution was exactly as promised.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=2000&auto=format&fit=crop"
+    image: "/images/testimonials/avatar3.jpg"
   },
   {
     name: "David & Laura Smith",
-    role: "Homeowners, Penthouse",
-    content: "Working with AVYRON was an absolute pleasure. Their team understood our lifestyle and designed a space that is both breathtakingly beautiful and incredibly functional.",
+    role: "Complete Home Interiors",
+    content: "Working with them was an absolute pleasure. Their team understood our lifestyle and designed a space that is both breathtakingly beautiful and incredibly functional.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2000&auto=format&fit=crop"
+    image: "/images/testimonials/avatar4.jpg"
   }
 ];
 
 const faqs = [
-  {
-    question: "What is your typical project timeline?",
-    answer: "Timelines vary based on the scope of the project. A full residential turnkey project usually takes 4-6 months from initial concept to final execution, while commercial spaces might take 2-4 months. We provide a detailed schedule during the planning phase."
-  },
-  {
-    question: "Do you offer virtual design consultations?",
-    answer: "Yes, we offer comprehensive virtual design services for international clients, providing 3D renderings, material samples shipped directly to you, and remote project management."
-  },
-  {
-    question: "How does the billing structure work?",
-    answer: "We typically work with a phased payment structure: 30% upon signing the design agreement, 40% before material procurement and execution begins, and the final 30% upon project completion and handover."
-  },
-  {
-    question: "Can you incorporate our existing furniture?",
-    answer: "Absolutely. Our designers excel at blending your cherished existing pieces with new, bespoke elements to create a cohesive and personalized space."
-  }
+  { question: "How much does a modular kitchen cost?", answer: "The cost of a modular kitchen depends on size, materials, finishes, and accessories. We offer options for various budgets. Contact us for a free personalized estimate." },
+  { question: "Do you provide free consultation?", answer: "Yes, we offer a complimentary initial design consultation to understand your requirements, style preferences, and space dimensions." },
+  { question: "How long does an interior project take?", answer: "A standard modular kitchen takes 4-6 weeks to execute. Complete home interiors typically take 8-12 weeks depending on the complexity and scope of the design." },
+  { question: "Can I customize the design?", answer: "Yes! All our designs are 100% customizable. Our expert designers work closely with you to ensure the final output matches your exact vision and lifestyle." }
 ];
 
 export function TestimonialsFAQ() {
@@ -107,64 +95,90 @@ export function TestimonialsFAQ() {
         </div>
       </section>
 
-      <section id="faq" className="py-12 md:py-16 bg-offwhite dark:bg-[#050B14] border-t border-black/5 dark:border-white/5">
+      <section id="faq" className="py-16 md:py-24 bg-white dark:bg-slate-900 border-t border-black/5 dark:border-white/5">
         <div className="container mx-auto px-6 md:px-12">
-          <div className="flex flex-col md:flex-row gap-16 max-w-6xl mx-auto">
-            <div className="md:w-1/3">
-              <motion.span 
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                className="text-saffron text-sm font-semibold tracking-widest uppercase mb-4 block"
-              >
+          
+          {/* Full Width Header, Aligned Compactly */}
+          <div className="max-w-7xl mx-auto mb-10 flex flex-col items-center text-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="flex items-center gap-4 mb-4"
+            >
+              <div className="w-8 h-[1px] bg-saffron hidden md:block"></div>
+              <span className="text-saffron text-xs font-medium tracking-[0.2em] uppercase">
                 Information
-              </motion.span>
-              <motion.h2 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1, duration: 0.6 }}
-                className="font-heading text-4xl font-bold text-navy dark:text-white mb-6"
-              >
-                Frequently Asked Questions
-              </motion.h2>
-              <p className="text-slate-600 dark:text-slate-400 mb-8">
-                Find answers to common questions about our design process, timelines, and services. If you need more specific information, feel free to contact us.
-              </p>
+              </span>
+              <div className="w-8 h-[1px] bg-saffron hidden md:block"></div>
+            </motion.div>
+            
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1, duration: 0.6 }}
+              className="font-heading text-3xl md:text-5xl font-light text-navy dark:text-white leading-tight"
+            >
+              Frequently <span className="italic text-slate-500 dark:text-slate-400">Asked Questions</span>
+            </motion.h2>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 max-w-7xl mx-auto">
+            
+            {/* Left Column: Questions */}
+            <div className="lg:w-5/12 lg:sticky lg:top-32 h-fit">
+              <div className="space-y-4">
+                {faqs.map((faq, idx) => (
+                  <motion.button
+                    key={idx}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 * idx, duration: 0.5 }}
+                    onClick={() => setOpenFaqIndex(idx)}
+                    className={`w-full group text-left px-6 py-5 rounded-xl transition-all duration-300 border flex items-center justify-between ${
+                      openFaqIndex === idx 
+                        ? 'bg-saffron text-white border-transparent' 
+                        : 'bg-slate-50 dark:bg-slate-800/30 text-navy dark:text-white border-black/5 dark:border-white/5 hover:border-saffron'
+                    }`}
+                  >
+                    <span className="font-heading text-lg truncate max-w-[90%]">{faq.question}</span>
+                    <ChevronRight 
+                      className={`w-5 h-5 transition-transform duration-300 ${
+                        openFaqIndex === idx 
+                          ? 'text-white rotate-90' 
+                          : 'opacity-0 group-hover:opacity-100 text-saffron'
+                      }`} 
+                    />
+                  </motion.button>
+                ))}
+              </div>
             </div>
             
-            <div className="md:w-2/3 space-y-4">
-              {faqs.map((faq, idx) => (
-                <motion.div 
-                  key={idx}
+            {/* Right Column: Answer Display */}
+            <div className="lg:w-7/12 flex items-start">
+              {openFaqIndex !== null && (
+                <motion.div
+                  key={openFaqIndex}
                   initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 * idx, duration: 0.4 }}
-                  className="border border-black/10 dark:border-white/10 rounded-2xl bg-white dark:bg-slate-900 overflow-hidden shadow-sm"
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="w-full relative min-h-[200px] flex items-center bg-slate-50 dark:bg-slate-800/30 border border-black/5 dark:border-white/5 rounded-2xl p-8 lg:p-12"
                 >
-                  <button
-                    onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
-                    className="w-full flex items-center justify-between p-6 text-left focus:outline-none"
-                  >
-                    <span className="font-semibold text-lg text-navy dark:text-white pr-4">{faq.question}</span>
-                    <ChevronDown 
-                      className={`text-slate-500 shrink-0 transition-transform duration-300 ${openFaqIndex === idx ? "rotate-180 text-saffron" : ""}`} 
-                    />
-                  </button>
-                  <motion.div
-                    initial={false}
-                    animate={{ height: openFaqIndex === idx ? "auto" : 0, opacity: openFaqIndex === idx ? 1 : 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="p-6 pt-0 text-slate-600 dark:text-slate-400 leading-relaxed border-t border-black/5 dark:border-white/5">
-                      {faq.answer}
-                    </div>
-                  </motion.div>
+                  <div className="w-full">
+                    <h3 className="font-heading text-2xl text-navy dark:text-white mb-6">
+                      {faqs[openFaqIndex].question}
+                    </h3>
+                    <p className="text-slate-500 dark:text-slate-400 font-light leading-relaxed text-lg">
+                      {faqs[openFaqIndex].answer}
+                    </p>
+                  </div>
                 </motion.div>
-              ))}
+              )}
             </div>
+
           </div>
         </div>
       </section>

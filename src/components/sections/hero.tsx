@@ -2,8 +2,8 @@
 
 import { motion, AnimatePresence, animate, useInView, Variants } from "framer-motion";
 import { ArrowRight, Star, Shield, Trophy, Users, Ruler, Paintbrush, Compass, PenTool } from "lucide-react";
-import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
+import { useConsultation } from "../consultation-provider";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -44,14 +44,15 @@ function AnimatedCounter({ from, to, duration = 2, suffix = "" }: { from: number
 }
 
 const backgroundImages = [
-  "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=2874&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2800&auto=format&fit=crop",
+  "/images/hero/elegant-living-room.jpg", // Elegant living room
+  "/images/hero/luxury-kitchen.jpg", // Luxury kitchen
+  "/images/hero/luxury-penthouse.jpg", // Luxury penthouse
 ];
 
 export function Hero() {
   const [currentImage, setCurrentImage] = useState(0);
   const [mousePos, setMousePos] = useState({ absoluteX: 0, absoluteY: 0, relativeX: 0, relativeY: 0 });
+  const { openModal } = useConsultation();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -229,34 +230,34 @@ export function Hero() {
             </motion.div>
             
             <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1]">
-              Designing Spaces That <span className="text-saffron italic">Inspire.</span>
+              Beautiful Homes. <span className="text-saffron italic">Thoughtfully Designed.</span>
             </motion.h1>
             
             <motion.p variants={itemVariants} className="text-lg md:text-xl text-white/90 font-light max-w-2xl pt-4">
-              Luxury interiors crafted for modern living. We transform environments into timeless, breathtaking experiences tailored to your lifestyle.
+              Premium modular kitchens and complete home interiors designed around your lifestyle, taste and budget.
             </motion.p>
             
             <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 pt-6">
-              <Link href="/projects" className="w-full sm:w-auto">
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="w-full sm:w-auto px-8 py-4 rounded-full bg-saffron hover:bg-saffron/90 text-white font-semibold transition-colors shadow-lg shadow-saffron/20 flex items-center justify-center gap-2 group relative overflow-hidden"
-                >
-                  <span className="relative z-10 flex items-center gap-2">Explore Portfolio <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
-                  <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300 rounded-full"></div>
-                </motion.button>
-              </Link>
-              <Link href="/contact" className="w-full sm:w-auto">
+              <motion.button 
+                onClick={openModal}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full sm:w-auto px-8 py-4 rounded-full bg-saffron hover:bg-saffron/90 text-white font-semibold transition-colors shadow-lg shadow-saffron/20 flex items-center justify-center gap-2 group relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center gap-2">Get Free Consultation <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
+                <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300 rounded-full"></div>
+              </motion.button>
+              
+              <a href="#projects" className="w-full sm:w-auto">
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-semibold transition-colors text-center group relative overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]"
                 >
-                  <span className="relative z-10">Consult With Us</span>
+                  <span className="relative z-10">Explore Our Designs</span>
                   <div className="absolute inset-0 h-full w-full bg-white/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
                 </motion.button>
-              </Link>
+              </a>
             </motion.div>
           </motion.div>
         </div>
@@ -277,40 +278,40 @@ export function Hero() {
                 <div className="p-2 bg-saffron/10 rounded-xl group-hover:bg-saffron/20 group-hover:scale-110 transition-all duration-300 mb-2">
                   <Star className="w-5 h-5 text-saffron" />
                 </div>
-                <h3 className="text-3xl md:text-4xl font-bold text-navy dark:text-white">
-                  <AnimatedCounter from={0} to={15} suffix="+" />
+                <h3 className="text-xl md:text-2xl font-bold text-navy dark:text-white">
+                  Free Consultation
                 </h3>
-                <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-semibold tracking-wider uppercase">Years Experience</p>
+                <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide uppercase mt-1">Expert Advice</p>
               </div>
 
               <div className="flex flex-col items-center justify-center space-y-1 text-center group px-4">
                 <div className="p-2 bg-blue-500/10 rounded-xl group-hover:bg-blue-500/20 group-hover:scale-110 transition-all duration-300 mb-2">
-                  <Trophy className="w-5 h-5 text-blue-500" />
+                  <Ruler className="w-5 h-5 text-blue-500" />
                 </div>
-                <h3 className="text-3xl md:text-4xl font-bold text-navy dark:text-white">
-                  <AnimatedCounter from={0} to={50} suffix="+" />
+                <h3 className="text-xl md:text-2xl font-bold text-navy dark:text-white">
+                  Free Estimate
                 </h3>
-                <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-semibold tracking-wider uppercase">Awards Won</p>
+                <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide uppercase mt-1">Transparent Pricing</p>
               </div>
 
               <div className="flex flex-col items-center justify-center space-y-1 text-center group px-4">
                 <div className="p-2 bg-emerald-500/10 rounded-xl group-hover:bg-emerald-500/20 group-hover:scale-110 transition-all duration-300 mb-2">
-                  <Shield className="w-5 h-5 text-emerald-500" />
+                  <Paintbrush className="w-5 h-5 text-emerald-500" />
                 </div>
-                <h3 className="text-3xl md:text-4xl font-bold text-navy dark:text-white">
-                  <AnimatedCounter from={0} to={500} duration={2.5} suffix="+" />
+                <h3 className="text-xl md:text-2xl font-bold text-navy dark:text-white">
+                  Premium Designs
                 </h3>
-                <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-semibold tracking-wider uppercase">Projects Done</p>
+                <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide uppercase mt-1">Personalized For You</p>
               </div>
 
               <div className="flex flex-col items-center justify-center space-y-1 text-center group px-4">
                 <div className="p-2 bg-purple-500/10 rounded-xl group-hover:bg-purple-500/20 group-hover:scale-110 transition-all duration-300 mb-2">
-                  <Users className="w-5 h-5 text-purple-500" />
+                  <Shield className="w-5 h-5 text-purple-500" />
                 </div>
-                <h3 className="text-3xl md:text-4xl font-bold text-navy dark:text-white">
-                  <AnimatedCounter from={0} to={100} suffix="%" />
+                <h3 className="text-xl md:text-2xl font-bold text-navy dark:text-white">
+                  Expert Execution
                 </h3>
-                <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400 font-semibold tracking-wider uppercase">Client Satisfaction</p>
+                <p className="text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium tracking-wide uppercase mt-1">On-Time Delivery</p>
               </div>
 
             </div>

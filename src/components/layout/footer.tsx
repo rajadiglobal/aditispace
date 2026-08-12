@@ -70,8 +70,8 @@ export function Footer() {
             <div className="space-y-6">
               <h4 className="font-heading text-xl font-semibold">Contact Us</h4>
               <ul className="space-y-4 text-primary-foreground/70">
-                <li>123 Luxury Avenue<br/>Design District, NY 10001</li>
-                <li><a href="tel:+15551234567" className="hover:text-accent transition-colors">+1 (555) 123-4567</a></li>
+                <li>A-367, Sector 46,<br/>Noida, UP, India, Pin-201301</li>
+                <li><a href="tel:+919110447020" className="hover:text-accent transition-colors">+91 9110447020</a></li>
                 <li><a href="mailto:hello@avyronstudio.com" className="hover:text-accent transition-colors">hello@avyronstudio.com</a></li>
               </ul>
             </div>

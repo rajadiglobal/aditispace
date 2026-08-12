@@ -5,23 +5,41 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 
-const categories = ["All", "Residential", "Commercial", "Hospitality"];
+const categories = ["All", "Kitchen", "Living Room", "Bedroom", "Wardrobe", "Full Home"];
 
 const projects = [
-  { id: 1, title: "Modern Minimalist Villa", category: "Residential", image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2075&auto=format&fit=crop", size: "large" },
-  { id: 2, title: "Executive Tech Office", category: "Commercial", image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop", size: "small" },
-  { id: 3, title: "Artisan Coffee House", category: "Hospitality", image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?q=80&w=2047&auto=format&fit=crop", size: "small" },
-  { id: 4, title: "Luxury Penthouse", category: "Residential", image: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2070&auto=format&fit=crop", size: "medium" },
-  { id: 5, title: "Boutique Hotel Lobby", category: "Hospitality", image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=2025&auto=format&fit=crop", size: "large" },
-  { id: 6, title: "Creative Studio Workspace", category: "Commercial", image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=2070&auto=format&fit=crop", size: "medium" },
+  // Kitchen (3)
+  { id: 1, title: "Modern L-Shaped Kitchen", category: "Kitchen", image: "/images/hero/luxury-kitchen.jpg", size: "large", featured: true },
+  { id: 2, title: "Classic Wood Kitchen", category: "Kitchen", image: "/images/portfolio/kitchen-after.jpg", size: "small" },
+  { id: 3, title: "Open Plan Kitchen", category: "Kitchen", image: "/images/portfolio/kitchen-before.jpg", size: "medium" },
+  
+  // Living Room (3)
+  { id: 4, title: "Minimalist Living Space", category: "Living Room", image: "/images/hero/elegant-living-room.jpg", size: "small", featured: true },
+  { id: 5, title: "Cozy Family Lounge", category: "Living Room", image: "/images/portfolio/living-room-before.jpg", size: "medium" },
+  { id: 6, title: "Contemporary Living Area", category: "Living Room", image: "/images/hero/elegant-living-room.jpg", size: "large" },
+  
+  // Bedroom (3)
+  { id: 7, title: "Cozy Master Bedroom", category: "Bedroom", image: "/images/portfolio/master-bedroom.jpg", size: "large", featured: true },
+  { id: 8, title: "Minimalist Guest Room", category: "Bedroom", image: "/images/portfolio/bedroom-before.jpg", size: "small" },
+  { id: 9, title: "Luxury Suite Bedroom", category: "Bedroom", image: "/images/portfolio/master-bedroom.jpg", size: "medium" },
+  
+  // Wardrobe (3)
+  { id: 10, title: "Walk-in Glass Wardrobe", category: "Wardrobe", image: "/images/portfolio/walk-in-wardrobe.jpg", size: "medium" },
+  { id: 11, title: "Bespoke Wooden Closet", category: "Wardrobe", image: "/images/portfolio/walk-in-wardrobe.jpg", size: "large", featured: true },
+  { id: 12, title: "Modern Minimalist Wardrobe", category: "Wardrobe", image: "/images/portfolio/walk-in-wardrobe.jpg", size: "small" },
+  
+  // Full Home (3)
+  { id: 13, title: "Luxury Penthouse", category: "Full Home", image: "/images/hero/luxury-penthouse.jpg", size: "large", featured: true },
+  { id: 14, title: "Contemporary Apartment", category: "Full Home", image: "/images/portfolio/contemporary-apartment.jpg", size: "medium" },
+  { id: 15, title: "Modern Villa Interior", category: "Full Home", image: "/images/hero/luxury-penthouse.jpg", size: "small" },
 ];
 
 export function Portfolio() {
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const filteredProjects = projects.filter(
-    project => activeCategory === "All" || project.category === activeCategory
-  );
+  const filteredProjects = activeCategory === "All"
+    ? projects.filter(project => project.featured)
+    : projects.filter(project => project.category === activeCategory);
 
   return (
     <section id="portfolio" className="py-12 md:py-16 bg-white dark:bg-slate-900 border-t border-black/5 dark:border-white/5">
@@ -39,7 +57,7 @@ export function Portfolio() {
               transition={{ delay: 0.1, duration: 0.6 }}
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-navy dark:text-white tracking-tight leading-[1.1]"
             >
-              A Curated Selection of our <span className="italic font-light text-saffron">Finest Projects</span>
+              Our <span className="italic font-light text-saffron">Design Gallery</span>
             </motion.h2>
           </div>
           
@@ -68,8 +86,13 @@ export function Portfolio() {
 
         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[300px]">
           <AnimatePresence>
-            {filteredProjects.map((project) => {
-              const rowSpan = project.size === "large" ? "md:row-span-2" : project.size === "medium" ? "row-span-1" : "row-span-1";
+            {filteredProjects.map((project, index) => {
+              let gridClass = "col-span-1 row-span-1";
+              if (activeCategory === "All" && index === 0) {
+                gridClass = "md:col-span-2 row-span-1";
+              } else if (activeCategory !== "All" && index === 0) {
+                gridClass = "md:col-span-2 lg:col-span-1 row-span-1";
+              }
               
               return (
                 <motion.div
@@ -79,7 +102,7 @@ export function Portfolio() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.4 }}
-                  className={`group relative overflow-hidden rounded-[2rem] bg-slate-100 dark:bg-slate-800 ${rowSpan} shadow-sm hover:shadow-xl transition-all duration-500`}
+                  className={`group relative overflow-hidden rounded-[2rem] bg-slate-100 dark:bg-slate-800 ${gridClass} shadow-sm hover:shadow-xl transition-all duration-500`}
                 >
                   <Image 
                     src={project.image}

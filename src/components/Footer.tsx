@@ -1,9 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, MapPin, Globe } from "lucide-react";
+import { ArrowRight, MapPin, Globe, CheckCircle2, MessageCircle } from "lucide-react";
+import { useState } from "react";
 
 export function Footer() {
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubscribed(true);
+  };
   return (
     <footer className="relative bg-slate-50 dark:bg-[#050B14] text-navy dark:text-white pt-12 pb-4 overflow-hidden border-t border-black/10 dark:border-white/10 mt-auto">
       {/* Background Effects */}
@@ -25,22 +32,29 @@ export function Footer() {
                 Join our newsletter for the latest in luxury interior trends, design tips, and bespoke residential projects.
               </p>
             </div>
-            <form className="flex w-full md:w-auto relative" onSubmit={(e) => e.preventDefault()}>
-              <label htmlFor="newsletter-email" className="sr-only">Email address</label>
-              <input
-                id="newsletter-email"
-                type="email"
-                placeholder="Enter your email address"
-                required
-                className="w-full md:w-[320px] bg-white dark:bg-black/20 backdrop-blur-md border border-black/10 dark:border-white/10 text-slate-800 dark:text-white pl-5 pr-[110px] py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-saffron/50 focus:border-saffron/50 transition placeholder:text-slate-400 dark:placeholder:text-white/40 shadow-inner text-sm"
-              />
-              <button
-                type="submit"
-                className="absolute right-1.5 top-1.5 bottom-1.5 bg-saffron hover:bg-saffron/90 text-white px-4 rounded-full font-semibold transition hover:scale-105 active:scale-95 flex items-center gap-2 shadow-md shadow-saffron/20 text-sm"
-              >
-                Subscribe <ArrowRight className="w-4 h-4" />
-              </button>
-            </form>
+            {isSubscribed ? (
+              <div className="flex w-full md:w-auto relative items-center gap-3 bg-green-500/10 dark:bg-green-500/20 px-6 py-3 rounded-full border border-green-500/20 text-green-700 dark:text-green-400 mt-4 md:mt-0">
+                <CheckCircle2 className="w-5 h-5" />
+                <span className="font-medium text-sm">Thanks for subscribing!</span>
+              </div>
+            ) : (
+              <form className="flex w-full md:w-auto relative mt-4 md:mt-0" onSubmit={handleSubscribe}>
+                <label htmlFor="newsletter-email" className="sr-only">Email address</label>
+                <input
+                  id="newsletter-email"
+                  type="email"
+                  placeholder="Enter your email address"
+                  required
+                  className="w-full md:w-[320px] bg-white dark:bg-black/20 backdrop-blur-md border border-black/10 dark:border-white/10 text-slate-800 dark:text-white pl-5 pr-[110px] py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-saffron/50 focus:border-saffron/50 transition placeholder:text-slate-400 dark:placeholder:text-white/40 shadow-inner text-sm"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-1.5 top-1.5 bottom-1.5 bg-saffron hover:bg-saffron/90 text-white px-4 rounded-full font-semibold transition hover:scale-105 active:scale-95 flex items-center gap-2 shadow-md shadow-saffron/20 text-sm"
+                >
+                  Subscribe <ArrowRight className="w-4 h-4" />
+                </button>
+              </form>
+            )}
           </div>
         </div>
 
@@ -151,6 +165,27 @@ export function Footer() {
                  <Globe className="w-24 h-24 text-saffron/40 group-hover:text-saffron/70 transition-colors duration-500" strokeWidth={1} />
               </div>
             </div>
+          </div>
+        </div>
+        
+        {/* Bottom Bar - Copyright and Social Links */}
+        <div className="border-t border-black/10 dark:border-white/10 pt-8 pb-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            © {new Date().getFullYear()} Avyron Studio. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4">
+            <a href="#" className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            </a>
+            <a href="#" className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
+            </a>
+            <a href="https://wa.me/919110447020" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] hover:bg-[#25D366] hover:text-white transition-colors">
+              <MessageCircle className="w-4 h-4" />
+            </a>
           </div>
         </div>
 

@@ -4,6 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ConsultationProvider } from "@/components/consultation-provider";
+import { WhatsAppWidget } from "@/components/whatsapp-widget";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -34,11 +36,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
+          <ConsultationProvider>
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+            <WhatsAppWidget />
+          </ConsultationProvider>
         </ThemeProvider>
       </body>
     </html>

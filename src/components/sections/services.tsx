@@ -6,32 +6,46 @@ import Link from "next/link";
 
 const services = [
   {
-    title: "Residential Spaces",
-    desc: "Bespoke home interiors that reflect your personal style and elevate everyday living.",
-    image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1000&auto=format&fit=crop",
-    tags: ["Luxury", "Bespoke"],
-    href: "/services/residential"
+    title: "Modular Kitchens",
+    desc: "Elegant, functional and customized modular kitchens.",
+    image: "/images/portfolio/kitchen-after.jpg", // Stunning kitchen
+    tags: ["Functional", "Elegant"],
+    href: "#contact"
   },
   {
-    title: "Commercial Offices",
-    desc: "Inspiring workspaces designed for productivity, collaboration, and brand identity.",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1000&auto=format&fit=crop",
-    tags: ["Corporate", "Modern"],
-    href: "/services/commercial"
+    title: "Living Room Interiors",
+    desc: "Modern living spaces designed for comfort and style.",
+    image: "/images/hero/elegant-living-room.jpg", // Elegant living room
+    tags: ["Comfort", "Modern"],
+    href: "#contact"
   },
   {
-    title: "Hospitality & Hotels",
-    desc: "Unforgettable atmospheres for restaurants, cafes, and hotels that keep guests coming back.",
-    image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1000&auto=format&fit=crop",
-    tags: ["Experiential", "Elegant"],
-    href: "/services/hospitality"
+    title: "Bedroom Interiors",
+    desc: "Beautiful and practical bedrooms tailored to your lifestyle.",
+    image: "/images/portfolio/master-bedroom.jpg", // Premium bedroom
+    tags: ["Relaxing", "Tailored"],
+    href: "#contact"
   },
   {
-    title: "Retail Boutiques",
-    desc: "Strategic design that enhances customer experience and drives brand engagement.",
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1000&auto=format&fit=crop",
-    tags: ["Commercial", "Strategic"],
-    href: "/services/retail"
+    title: "Complete Home Interiors",
+    desc: "End-to-end interior solutions for your entire home.",
+    image: "/images/portfolio/contemporary-apartment.jpg", // Luxury full home stairs
+    tags: ["End-to-End", "Turnkey"],
+    href: "#contact"
+  },
+  {
+    title: "Wardrobes & Storage",
+    desc: "Smart storage solutions designed to maximize space.",
+    image: "/images/portfolio/walk-in-wardrobe.jpg",
+    tags: ["Smart", "Spacious"],
+    href: "#contact"
+  },
+  {
+    title: "Customized Interiors",
+    desc: "Personalized designs created according to your requirements.",
+    image: "/images/services/interior-decor.jpg",
+    tags: ["Bespoke", "Unique"],
+    href: "#contact"
   }
 ];
 
@@ -56,15 +70,15 @@ export function Services() {
             </h2>
           </div>
           
-          <Link href="/services">
+          <a href="#projects">
             <button className="hidden md:inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 py-2 rounded-full border border-black/10 dark:border-white/10 bg-transparent text-navy dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-300 h-10 px-6 sm:h-12 sm:px-8">
-              View All Services
+              Explore Portfolio
             </button>
-          </Link>
+          </a>
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mt-12 md:mt-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-12 md:mt-20">
           {services.map((service, idx) => (
             <Link key={idx} href={service.href} className="group relative rounded-[2rem] overflow-hidden bg-white dark:bg-slate-800 border border-black/5 dark:border-white/5 aspect-[4/3] md:aspect-[21/9] lg:aspect-[4/3] shadow-sm hover:shadow-xl transition-all duration-500">
               
@@ -105,11 +119,11 @@ export function Services() {
           ))}
         </div>
         
-        <Link href="/services" className="md:hidden mt-8 block w-full">
+        <a href="#projects" className="md:hidden mt-8 block w-full">
           <button className="w-full inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 py-2 rounded-full border border-black/10 dark:border-white/10 bg-transparent text-navy dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-300 h-12 px-8">
-            View All Services
+            Explore Portfolio
           </button>
-        </Link>
+        </a>
 
       </div>
     </section>

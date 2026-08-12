@@ -19,24 +19,24 @@ const PROJECTS: TransformationProject[] = [
     id: "penthouse",
     title: "Grand Penthouse Salon",
     category: "Living Space",
-    beforeImage: "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop",
-    afterImage: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=2067&auto=format&fit=crop",
+    beforeImage: "/images/portfolio/living-room-before.jpg",
+    afterImage: "/images/portfolio/contemporary-apartment.jpg",
     description: "Converted an unfinished concrete structure into a light-filled architectural masterpiece with custom Italian marble finishings."
   },
   {
     id: "kitchen",
     title: "Architectural Culinary Haven",
     category: "Kitchen & Dining",
-    beforeImage: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=2070&auto=format&fit=crop",
-    afterImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
+    beforeImage: "/images/portfolio/kitchen-before.jpg",
+    afterImage: "/images/portfolio/kitchen-after.jpg",
     description: "Transformed a cramped dated kitchen into a modern minimalist culinary space featuring seamless walnut cabinetry and monolithic island."
   },
   {
     id: "suite",
     title: "Serene Sanctuary Suite",
     category: "Master Bedroom",
-    beforeImage: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?q=80&w=2070&auto=format&fit=crop",
-    afterImage: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?q=80&w=2070&auto=format&fit=crop",
+    beforeImage: "/images/portfolio/bedroom-before.jpg",
+    afterImage: "/images/portfolio/master-bedroom.jpg",
     description: "Reimagined a plain bedroom into a luxurious retreat featuring micro-cement accent walls, warm ambient lighting, and organic linen textiles."
   }
 ];

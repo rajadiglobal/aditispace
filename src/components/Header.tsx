@@ -3,16 +3,28 @@
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { Moon, Sun, ChevronDown, Globe, Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useConsultation } from "./consultation-provider";
+
 const navLinks = [
-  { name: "Studio", href: "/about-us" },
-  { name: "Residential Design", href: "/services/residential" },
-  { name: "Commercial Interiors", href: "/services/commercial" },
-  { name: "Portfolio", href: "/projects" },
-  { name: "Design Journal", href: "/blog" },
-  { name: "Contact", href: "/contact" },
+  { name: "Home", href: "/" },
+  { name: "Services", href: "/services" },
+  { name: "Modular Kitchens", href: "/modular-kitchens" },
+  { name: "Portfolio", href: "/portfolio" },
+  { name: "Testimonials", href: "/testimonials" },
+];
+
+const languages = [
+  { code: 'en', label: 'English', short: 'EN' },
+  { code: 'hi', label: 'Hindi', short: 'HI' },
+  { code: 'bn', label: 'Bengali', short: 'BN' },
+  { code: 'te', label: 'Telugu', short: 'TE' },
+  { code: 'mr', label: 'Marathi', short: 'MR' },
+  { code: 'ta', label: 'Tamil', short: 'TA' },
+  { code: 'gu', label: 'Gujarati', short: 'GU' },
 ];
 
 export function Header() {
@@ -20,6 +32,45 @@ export function Header() {
   const [mounted, setMounted] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState('en');
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const langDropdownRef = useRef<HTMLDivElement>(null);
+  const { openModal } = useConsultation();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
+        setLangMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleLanguageChange = (lang: string) => {
+    setCurrentLang(lang);
+    setLangMenuOpen(false);
+    
+    // Set Google Translate cookie
+    if (lang === 'en') {
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; domain=' + window.location.hostname + '; path=/;';
+    } else {
+      document.cookie = `googtrans=/en/${lang}; path=/`;
+      document.cookie = `googtrans=/en/${lang}; domain=${window.location.hostname}; path=/`;
+    }
+
+    const googleSelect = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+    if (googleSelect) {
+      googleSelect.value = lang;
+      // Google Translate requires the change event to bubble
+      googleSelect.dispatchEvent(new Event('change', { bubbles: true, cancelable: true }));
+    } else {
+      // If the widget hasn't loaded properly, reload the page to apply the cookie
+      window.location.reload();
+    }
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -27,6 +78,36 @@ export function Header() {
       setIsScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
+
+    // Google Translate Init
+    if (typeof window !== "undefined") {
+      const gwindow = window as any;
+      gwindow.googleTranslateElementInit = () => {
+        if (gwindow.google && gwindow.google.translate) {
+          const container = document.getElementById("google_translate_element");
+          if (container && container.childElementCount === 0) {
+            new gwindow.google.translate.TranslateElement(
+              {
+                pageLanguage: "en",
+                includedLanguages: "en,hi,bn,te,mr,ta,gu",
+              },
+              "google_translate_element"
+            );
+          }
+        }
+      };
+
+      if (!document.getElementById("google-translate-script")) {
+        const addScript = document.createElement("script");
+        addScript.id = "google-translate-script";
+        addScript.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+        addScript.async = true;
+        document.body.appendChild(addScript);
+      } else if (gwindow.google && gwindow.google.translate) {
+        gwindow.googleTranslateElementInit();
+      }
+    }
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -54,17 +135,22 @@ export function Header() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-0.5">
-          {navLinks.map((item) => (
-            <div key={item.name} className="relative px-2 xl:px-3 py-2 group whitespace-nowrap">
-              <Link href={item.href} className="relative z-10 flex items-center gap-1 group outline-none">
-                <span className="text-sm font-semibold transition-colors duration-300 text-navy/70 dark:text-slate-400 group-hover:text-navy dark:group-hover:text-slate-200">
-                  {item.name}
-                </span>
-              </Link>
-              <div className="absolute inset-0 bg-black/5 dark:bg-white/5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 scale-90 group-hover:scale-100 pointer-events-none"></div>
-            </div>
-          ))}
+        <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          {navLinks.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <div key={item.name} className="relative group whitespace-nowrap">
+                <Link 
+                  href={item.href} 
+                  className={`relative z-10 flex items-center justify-center px-4 py-1.5 md:py-2 md:px-5 rounded-full transition-all duration-300 border ${isActive ? 'border-saffron/70 text-saffron bg-black/5 dark:bg-black/20' : 'border-transparent text-navy/70 dark:text-slate-400 hover:text-navy dark:hover:text-slate-200 hover:bg-black/5 dark:hover:bg-white/5'}`}
+                >
+                  <span className="text-sm font-semibold tracking-wide">
+                    {item.name}
+                  </span>
+                </Link>
+              </div>
+            );
+          })}
         </nav>
 
         {/* Right Actions */}
@@ -82,21 +168,57 @@ export function Header() {
             </button>
           )}
 
-          {/* Language Selector */}
-          <div className="relative hidden sm:block">
-            <button type="button" className="flex items-center gap-2 px-3 py-2 rounded-full transition duration-300 outline-none group border bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border-transparent hover:border-black/10 dark:hover:border-white/10" aria-label="Select Language">
-              <Globe className="w-4 h-4 text-navy/70 dark:text-slate-400 group-hover:text-navy dark:group-hover:text-slate-200 transition-colors" />
-              <span className="text-sm font-semibold text-navy/80 dark:text-slate-300 group-hover:text-navy dark:group-hover:text-slate-100 hidden sm:inline-block">EN</span>
-              <ChevronDown className="w-3 h-3 text-navy/50 dark:text-slate-500 transition-transform duration-300" />
+          {/* Custom Language Selector */}
+          <div className="relative flex items-center" ref={langDropdownRef}>
+            <button
+              onClick={() => setLangMenuOpen(!langMenuOpen)}
+              className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 rounded-full transition duration-300 outline-none group border bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 border-transparent hover:border-black/10 dark:hover:border-white/10"
+              aria-label="Select Language"
+            >
+              <Globe className="w-4 h-4 text-navy/70 dark:text-slate-400 group-hover:text-navy dark:group-hover:text-slate-200 transition-colors shrink-0" />
+              <span className="notranslate text-xs sm:text-sm font-semibold text-navy/80 dark:text-slate-300 group-hover:text-navy dark:group-hover:text-slate-100 uppercase mt-[1px]">
+                {languages.find(l => l.code === currentLang)?.short || 'EN'}
+              </span>
+              <ChevronDown className={`w-3 h-3 text-navy/50 dark:text-slate-500 transition-transform duration-300 shrink-0 ${langMenuOpen ? 'rotate-180' : ''}`} />
             </button>
+
+            <AnimatePresence>
+              {langMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-full mt-2 right-0 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-black/10 dark:border-white/10 shadow-xl rounded-2xl py-2 w-44 z-50 flex flex-col overflow-hidden"
+                >
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => handleLanguageChange(lang.code)}
+                      className={`notranslate text-left px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-black/5 dark:hover:bg-white/5 ${
+                        currentLang === lang.code 
+                          ? 'text-saffron bg-saffron/10' 
+                          : 'text-navy/80 dark:text-slate-300 hover:text-navy dark:hover:text-slate-100'
+                      }`}
+                    >
+                      {lang.short} - {lang.label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+            
+            {/* Hidden Google Translate Element */}
+            <div id="google_translate_element" className="hidden"></div>
           </div>
 
           {/* CTA Button */}
-          <Link href="/contact" className="hidden sm:block">
-            <button className="inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 py-2 rounded-full bg-navy text-white hover:bg-saffron hover:text-white transition-colors duration-300 shadow-md hover:shadow-lg shadow-navy/20 hover:shadow-saffron/20 px-4 h-9 text-xs sm:px-5 sm:h-10 sm:text-sm">
-              Consultation
-            </button>
-          </Link>
+          <button 
+            onClick={openModal}
+            className="hidden sm:inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 py-2 rounded-full bg-navy text-white hover:bg-saffron hover:text-white transition-colors duration-300 shadow-md hover:shadow-lg shadow-navy/20 hover:shadow-saffron/20 px-4 h-9 text-xs sm:px-5 sm:h-10 sm:text-sm"
+          >
+            Get Free Consultation
+          </button>
 
           {/* Mobile Menu Toggle */}
           <button 
@@ -120,27 +242,33 @@ export function Header() {
               className="absolute top-[calc(100%+1rem)] left-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl border border-black/10 dark:border-white/10 shadow-2xl rounded-3xl py-6 px-4 flex flex-col gap-2 lg:hidden overflow-hidden pointer-events-auto origin-top"
             >
               <div className="flex flex-col gap-1 max-h-[60vh] overflow-y-auto px-2">
-                {navLinks.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="text-lg font-medium text-navy/80 dark:text-slate-300 hover:text-saffron dark:hover:text-saffron transition-colors px-4 py-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-xl w-full"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+                {navLinks.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`text-lg font-medium transition-colors px-4 py-3 hover:bg-black/5 dark:hover:bg-white/5 rounded-xl w-full ${isActive ? 'text-saffron bg-black/5 dark:bg-white/5' : 'text-navy/80 dark:text-slate-300 hover:text-saffron dark:hover:text-saffron'}`}
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                })}
               </div>
               <div className="flex flex-col gap-4 px-6 mt-2 pt-4 border-t border-black/10 dark:border-white/10">
-                <Link href="/contact" className="w-full" onClick={() => setMobileMenuOpen(false)}>
-                  <button className="w-full py-3 rounded-full bg-navy text-white hover:bg-saffron transition-colors shadow-md text-sm font-semibold">
-                    Consultation
-                  </button>
-                </Link>
+                <button 
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    openModal();
+                  }}
+                  className="w-full py-3 rounded-full bg-navy text-white hover:bg-saffron transition-colors shadow-md text-sm font-semibold"
+                >
+                  Get Free Consultation
+                </button>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-navy/80 dark:text-slate-300">
-                    <Globe className="w-5 h-5" />
-                    <span className="text-sm font-semibold">English</span>
+                    <span className="text-sm font-semibold">Translation</span>
                   </div>
                   {mounted && (
                     <button
@@ -156,6 +284,22 @@ export function Header() {
           )}
         </AnimatePresence>
       </motion.header>
+      <style dangerouslySetInnerHTML={{__html: `
+        .goog-te-banner-frame {
+          display: none !important;
+          visibility: hidden !important;
+        }
+        .VIpgJd-ZVi9od-ORHb-OEVmcd {
+          display: none !important;
+        }
+        body {
+          top: 0px !important;
+          position: static !important;
+        }
+        #goog-gt-tt, .goog-te-balloon-frame {
+          display: none !important;
+        }
+      `}} />
     </div>
   );
 }
