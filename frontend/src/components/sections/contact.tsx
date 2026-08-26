@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import * as m from "motion/react-m";
 import { Mail, MapPin, Phone, Send, CheckCircle2, MessageCircle } from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -49,15 +49,15 @@ export function ContactSection() {
     <section className="py-20 bg-background relative overflow-hidden" id="contact">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <motion.h2 
+          <m.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold tracking-tight mb-4"
           >
             Get in <span className="text-saffron italic">Touch</span>
-          </motion.h2>
-          <motion.p 
+          </m.h2>
+          <m.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -65,12 +65,12 @@ export function ContactSection() {
             className="text-muted-foreground text-lg max-w-2xl mx-auto"
           >
             Have a project in mind? Let's discuss how we can transform your space into a masterpiece.
-          </motion.p>
+          </m.p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8">
           {/* Contact Form */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -87,7 +87,7 @@ export function ContactSection() {
                 </p>
                 <button 
                   onClick={() => setIsSuccess(false)}
-                  className="mt-8 px-8 py-3 rounded-xl bg-navy hover:bg-navy/90 text-white font-medium transition-all"
+                  className="mt-8 px-8 py-3 rounded-xl bg-navy hover:bg-navy/90 text-white font-medium transition-[background-color] duration-300"
                 >
                   Send Another Message
                 </button>
@@ -132,7 +132,7 @@ export function ContactSection() {
                   <button 
                     type="submit" 
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl bg-navy hover:bg-navy/90 text-white font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-70 group"
+                    className="w-full py-4 rounded-xl bg-navy hover:bg-navy/90 text-white font-medium transition-[background-color,opacity] duration-300 flex items-center justify-center gap-2 disabled:opacity-70 group"
                   >
                     {isSubmitting ? "Sending..." : "Send Message"}
                     {!isSubmitting && <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />}
@@ -140,10 +140,10 @@ export function ContactSection() {
                 </form>
               </>
             )}
-          </motion.div>
+          </m.div>
 
           {/* Contact Info & Map */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -201,18 +201,19 @@ export function ContactSection() {
 
             {/* Map Container */}
             <div className="relative w-full h-[300px] md:h-[400px] rounded-2xl overflow-hidden border border-border shadow-sm flex-1">
-              <iframe 
-                src="https://maps.google.com/maps?q=Sector%2046%2C%20Noida&t=&z=13&ie=UTF8&iwloc=&output=embed" 
-                width="100%" 
-                height="100%" 
-                style={{ border: 0 }} 
-                allowFullScreen={false} 
-                loading="lazy" 
+              {/* Google Maps embed with secure sandbox */}
+              <iframe
+                sandbox="allow-scripts allow-popups"
+                src="https://maps.google.com/maps?q=Sector%2046%2C%20Noida&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="100%"
+                title="Avyron Studio location on Google Maps"
+                loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0 grayscale hover:grayscale-0 transition-all duration-700"
-              ></iframe>
+                className="absolute inset-0 grayscale hover:grayscale-0 transition-[filter] duration-700"
+              />
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

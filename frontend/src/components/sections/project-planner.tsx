@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import * as m from "motion/react-m";
+import { AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ChevronLeft, Building, Home, PaintBucket, Briefcase, CheckCircle2 } from "lucide-react";
 
@@ -23,15 +24,15 @@ export function ProjectPlanner() {
 
       <div className="container mx-auto px-6 md:px-12 max-w-4xl">
         <div className="text-center mb-16">
-          <motion.span 
+          <m.span 
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="text-saffron text-sm font-semibold tracking-widest uppercase mb-4 block"
           >
             Start Your Journey
-          </motion.span>
-          <motion.h2 
+          </m.span>
+          <m.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -39,8 +40,8 @@ export function ProjectPlanner() {
             className="font-heading text-4xl md:text-5xl font-bold text-navy dark:text-white mb-4"
           >
             Interactive Project Planner
-          </motion.h2>
-          <motion.p 
+          </m.h2>
+          <m.p 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -48,11 +49,11 @@ export function ProjectPlanner() {
             className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto"
           >
             Let&apos;s design your dream space together. Answer a few quick questions so we can understand your vision and requirements.
-          </motion.p>
+          </m.p>
         </div>
 
         {/* Planner Card */}
-        <motion.div 
+        <m.div 
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -82,7 +83,7 @@ export function ProjectPlanner() {
           <div className="flex-grow flex flex-col justify-center">
             <AnimatePresence mode="wait">
               {step === 1 && (
-                <motion.div
+                <m.div
                   key="step1"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -110,7 +111,7 @@ export function ProjectPlanner() {
                         <button
                           key={type.id}
                           onClick={() => setProjectType(type.id as ProjectType)}
-                          className={`flex items-start gap-4 p-6 rounded-2xl border-2 text-left transition-all duration-300 ${
+                          className={`flex items-start gap-4 p-6 rounded-2xl border-2 text-left transition-[border-color,background-color] duration-300 ${
                             isSelected 
                               ? "border-saffron bg-saffron/5" 
                               : "border-black/5 dark:border-white/5 hover:border-saffron/30 hover:bg-slate-50 dark:hover:bg-slate-800/50"
@@ -127,11 +128,11 @@ export function ProjectPlanner() {
                       );
                     })}
                   </div>
-                </motion.div>
+                </m.div>
               )}
 
               {step === 2 && (
-                <motion.div
+                <m.div
                   key="step2"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -151,18 +152,18 @@ export function ProjectPlanner() {
                     {["Small (Under 1000 sqft)", "Medium (1000 - 3000 sqft)", "Large (Over 3000 sqft)"].map((size) => (
                       <button
                         key={size}
-                        className="p-6 rounded-2xl border-2 border-black/5 dark:border-white/5 text-center hover:border-saffron hover:bg-saffron/5 transition-all duration-300"
+                        className="p-6 rounded-2xl border-2 border-black/5 dark:border-white/5 text-center hover:border-saffron hover:bg-saffron/5 transition-[border-color,background-color] duration-300"
                       >
                         <span className="font-medium text-navy dark:text-white">{size.split(" ")[0]}</span>
                         <span className="block text-xs text-slate-500 dark:text-slate-400 mt-2">{size.substring(size.indexOf("("))}</span>
                       </button>
                     ))}
                   </div>
-                </motion.div>
+                </m.div>
               )}
 
               {step === 3 && (
-                <motion.div
+                <m.div
                   key="step3"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -180,17 +181,17 @@ export function ProjectPlanner() {
                     {["$20,000 - $50,000", "$50,000 - $150,000", "$150,000 - $500,000", "$500,000+"].map((budget) => (
                       <button
                         key={budget}
-                        className="p-4 rounded-xl border border-black/10 dark:border-white/10 text-left hover:border-saffron hover:bg-saffron/5 transition-all duration-300"
+                        className="p-4 rounded-xl border border-black/10 dark:border-white/10 text-left hover:border-saffron hover:bg-saffron/5 transition-[border-color,background-color] duration-300"
                       >
                         <span className="font-medium text-navy dark:text-white text-lg">{budget}</span>
                       </button>
                     ))}
                   </div>
-                </motion.div>
+                </m.div>
               )}
 
               {step === 4 && (
-                <motion.div
+                <m.div
                   key="step4"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -210,7 +211,7 @@ export function ProjectPlanner() {
                   <Button size="lg" className="bg-navy text-white hover:bg-navy/90 dark:bg-white dark:text-navy dark:hover:bg-slate-200 px-8 py-6 text-lg rounded-full">
                     Submit Project Request
                   </Button>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
           </div>
@@ -237,7 +238,7 @@ export function ProjectPlanner() {
               </Button>
             </div>
           )}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

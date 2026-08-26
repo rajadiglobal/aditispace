@@ -5,7 +5,8 @@ import { useTheme } from "next-themes";
 import { Moon, Sun, ChevronDown, Globe, Menu, X } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import * as m from "motion/react-m";
+import { AnimatePresence } from "motion/react";
 
 import { useConsultation } from "./consultation-provider";
 
@@ -29,11 +30,14 @@ const languages = [
 
 export function Header() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  // mounted ref avoids the 'state from mount effect' anti-pattern
+  const mountedRef = useRef(false);
+  const [, forceUpdate] = useState(0);
+  const mounted = mountedRef.current;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('en');
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement | null>(null);
   const langDropdownRef = useRef<HTMLDivElement>(null);
   const { openModal } = useConsultation();
   const pathname = usePathname();
@@ -73,9 +77,13 @@ export function Header() {
   };
 
   useEffect(() => {
-    setMounted(true);
+    mountedRef.current = true;
+    forceUpdate(1);
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      const scrolled = window.scrollY > 20;
+      if (headerRef.current) {
+        headerRef.current.setAttribute('data-scrolled', scrolled ? 'true' : 'false');
+      }
     };
     window.addEventListener("scroll", handleScroll);
 
@@ -113,11 +121,11 @@ export function Header() {
 
   return (
     <div className="fixed top-0 inset-x-0 z-50 flex justify-center px-4 pt-4 sm:pt-6 pointer-events-none">
-      <motion.header
+      <m.header
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className={`pointer-events-auto w-full max-w-[1400px] flex items-center justify-between gap-4 rounded-full transition duration-500 whitespace-nowrap bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl shadow-lg border border-white/40 dark:border-white/10 h-16 px-6 md:px-8`}
+        className={`pointer-events-auto w-full max-w-[1400px] flex items-center justify-between gap-4 rounded-full transition-[background-color,border-color,box-shadow] duration-500 whitespace-nowrap bg-white/50 dark:bg-slate-900/50 backdrop-blur-xl shadow-lg border border-white/40 dark:border-white/10 h-16 px-6 md:px-8`}
       >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 lg:gap-4 group shrink-0">
@@ -184,7 +192,7 @@ export function Header() {
 
             <AnimatePresence>
               {langMenuOpen && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -204,7 +212,7 @@ export function Header() {
                       {lang.short} - {lang.label}
                     </button>
                   ))}
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
             
@@ -234,7 +242,7 @@ export function Header() {
         {/* Mobile Menu Dropdown */}
         <AnimatePresence>
           {mobileMenuOpen && (
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: -20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
@@ -273,6 +281,7 @@ export function Header() {
                   {mounted && (
                     <button
                       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                      aria-label="Toggle theme"
                       className="p-2 rounded-full bg-navy/5 dark:bg-white/5 text-navy dark:text-slate-300 hover:bg-navy/10 dark:hover:bg-white/10 transition-colors flex items-center justify-center"
                     >
                       {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -280,10 +289,10 @@ export function Header() {
                   )}
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
-      </motion.header>
+      </m.header>
       <style dangerouslySetInnerHTML={{__html: `
         .goog-te-banner-frame {
           display: none !important;

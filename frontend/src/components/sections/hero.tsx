@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, AnimatePresence, animate, useInView, Variants } from "framer-motion";
+import * as m from "motion/react-m";
+import { AnimatePresence, animate, useInView, Variants } from "motion/react";
 import { ArrowRight, Star, Shield, Trophy, Users, Ruler, Paintbrush, Compass, PenTool } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useConsultation } from "../consultation-provider";
@@ -87,7 +88,7 @@ export function Hero() {
         <AnimatePresence mode="wait">
           {backgroundImages.map((img, index) => (
             index === currentImage && (
-              <motion.div
+              <m.div
                 key={img}
                 initial={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
                 animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
@@ -107,7 +108,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/60 to-transparent dark:from-slate-900/95 dark:via-slate-900/70 z-0"></div>
         
         {/* Dynamic Cursor Glow */}
-        <motion.div 
+        <m.div 
           className="pointer-events-none absolute top-0 left-0 w-96 h-96 bg-saffron/20 rounded-full blur-[100px] z-10 mix-blend-screen hidden md:block"
           animate={{ 
             x: mousePos.absoluteX - 192, 
@@ -120,12 +121,12 @@ export function Hero() {
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-10 hidden lg:block">
           
           {/* Element 1: Space Planning / Blueprint */}
-          <motion.div 
+          <m.div 
             animate={{ x: mousePos.relativeX * -1.5, y: mousePos.relativeY * -1.5 }}
             transition={{ type: "spring", stiffness: 40, damping: 20 }}
             className="absolute top-[15%] right-[25%] pointer-events-auto cursor-pointer"
           >
-            <motion.div 
+            <m.div 
               animate={{ y: [0, -10, 0], rotate: [0, 2, -2, 0] }}
               whileHover={{ scale: 1.05, rotate: 0, boxShadow: "0px 10px 30px rgba(245,158,11,0.2)" }}
               transition={{ y: { repeat: Infinity, duration: 5, ease: "easeInOut" }, rotate: { repeat: Infinity, duration: 7, ease: "easeInOut" } }}
@@ -140,16 +141,16 @@ export function Hero() {
                   <div className="w-3/4 h-full bg-saffron"></div>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
           {/* Element 2: Material / Color Palette */}
-          <motion.div 
+          <m.div 
             animate={{ x: mousePos.relativeX * 1.5, y: mousePos.relativeY * 1.5 }}
             transition={{ type: "spring", stiffness: 40, damping: 20 }}
             className="absolute top-[40%] right-[8%] pointer-events-auto cursor-pointer"
           >
-            <motion.div 
+            <m.div 
               animate={{ y: [0, 15, 0], rotate: [-2, 2, -2] }}
               whileHover={{ scale: 1.05, rotate: 0, boxShadow: "0px 10px 30px rgba(96,165,250,0.2)" }}
               transition={{ y: { repeat: Infinity, duration: 6, ease: "easeInOut", delay: 1 }, rotate: { repeat: Infinity, duration: 8, ease: "easeInOut", delay: 1 } }}
@@ -165,16 +166,16 @@ export function Hero() {
                 <div className="w-12 h-12 rounded-lg bg-[#F5F5DC] shadow-inner group-hover:scale-105 transition-transform delay-100"></div>
                 <div className="w-12 h-12 rounded-lg bg-[#8B4513] shadow-inner group-hover:scale-105 transition-transform delay-150"></div>
               </div>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
           {/* Element 3: Concept Sketch */}
-          <motion.div 
+          <m.div 
             animate={{ x: mousePos.relativeX * -2, y: mousePos.relativeY * -2 }}
             transition={{ type: "spring", stiffness: 40, damping: 20 }}
             className="absolute bottom-[20%] right-[28%] pointer-events-auto cursor-pointer"
           >
-            <motion.div 
+            <m.div 
               animate={{ y: [0, -12, 0], rotate: [2, -1, 2] }}
               whileHover={{ scale: 1.05, rotate: 0, boxShadow: "0px 10px 30px rgba(167,139,250,0.2)" }}
               transition={{ y: { repeat: Infinity, duration: 7, ease: "easeInOut", delay: 2 }, rotate: { repeat: Infinity, duration: 9, ease: "easeInOut", delay: 2 } }}
@@ -187,58 +188,58 @@ export function Hero() {
                 <p className="text-white text-xs font-bold uppercase tracking-wider">3D Render</p>
               </div>
               <div className="w-32 h-2 bg-white/10 rounded-full mt-1 overflow-hidden relative">
-                <motion.div 
-                  className="absolute top-0 left-0 h-full bg-purple-400 rounded-full" 
-                  animate={{ width: ['20%', '90%', '20%'] }} 
+                <m.div 
+                  className="absolute top-0 left-0 h-full w-full bg-purple-400 rounded-full origin-left" 
+                  animate={{ scaleX: [0.2, 0.9, 0.2] }} 
                   transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }} 
                 />
               </div>
               <p className="text-[10px] text-white/50 text-right mt-1">Rendering...</p>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
 
           {/* Element 4: Direction / Compass */}
-          <motion.div 
+          <m.div 
             animate={{ x: mousePos.relativeX * 1.2, y: mousePos.relativeY * 1.2 }}
             transition={{ type: "spring", stiffness: 40, damping: 20 }}
             className="absolute bottom-[10%] right-[8%] pointer-events-auto cursor-pointer"
           >
-            <motion.div 
+            <m.div 
               animate={{ y: [0, 10, 0] }}
               whileHover={{ scale: 1.1, boxShadow: "0px 0px 30px rgba(52,211,153,0.3)" }}
               transition={{ y: { repeat: Infinity, duration: 5, ease: "easeInOut", delay: 0.5 } }}
               className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-full shadow-2xl group flex items-center justify-center"
             >
-              <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 20, ease: "linear" }}>
+              <m.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 20, ease: "linear" }}>
                  <Compass className="text-emerald-400 w-10 h-10 group-hover:text-emerald-300 transition-colors" />
-              </motion.div>
-            </motion.div>
-          </motion.div>
+              </m.div>
+            </m.div>
+          </m.div>
           
         </div>
         
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 pt-10 pointer-events-auto">
-          <motion.div 
+          <m.div 
             variants={containerVariants}
             initial="hidden"
             animate="visible"
             className="max-w-3xl space-y-6"
           >
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-medium">
+            <m.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-sm font-medium">
               <span className="w-2 h-2 rounded-full bg-saffron animate-pulse"></span>
               Award Winning Interior Studio
-            </motion.div>
+            </m.div>
             
-            <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1]">
+            <m.h1 variants={itemVariants} className="text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1]">
               Beautiful Homes. <span className="text-saffron italic">Thoughtfully Designed.</span>
-            </motion.h1>
+            </m.h1>
             
-            <motion.p variants={itemVariants} className="text-lg md:text-xl text-white/90 font-light max-w-2xl pt-4">
+            <m.p variants={itemVariants} className="text-lg md:text-xl text-white/90 font-light max-w-2xl pt-4">
               Premium modular kitchens and complete home interiors designed around your lifestyle, taste and budget.
-            </motion.p>
+            </m.p>
             
-            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 pt-6">
-              <motion.button 
+            <m.div variants={itemVariants} className="flex flex-col sm:flex-row items-center gap-4 pt-6">
+              <m.button 
                 onClick={openModal}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -246,36 +247,36 @@ export function Hero() {
               >
                 <span className="relative z-10 flex items-center gap-2">Get Free Consultation <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
                 <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300 rounded-full"></div>
-              </motion.button>
+              </m.button>
               
-              <a href="#projects" className="w-full sm:w-auto">
-                <motion.button 
+              <a href="#services" className="w-full sm:w-auto">
+                <m.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="w-full sm:w-auto px-8 py-4 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 text-white font-semibold transition-colors text-center group relative overflow-hidden shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]"
                 >
                   <span className="relative z-10">Explore Our Designs</span>
                   <div className="absolute inset-0 h-full w-full bg-white/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
-                </motion.button>
+                </m.button>
               </a>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         </div>
       </div>
 
       {/* Overlapping Stats Section */}
       <section className="relative z-30 -mt-12 md:-mt-20 pb-12">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8, ease: "easeOut" }}
-            className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-2xl rounded-2xl p-6 md:p-8 border border-white/40 dark:border-white/10 shadow-2xl flex items-center"
+            className="transition-[transform,opacity,box-shadow] duration-500 whitespace-nowrap bg-white/50 dark:bg-slate-900/50 backdrop-blur-2xl rounded-2xl p-6 md:p-8 border border-white/40 dark:border-white/10 shadow-2xl flex items-center"
           >
             <div className="w-full grid grid-cols-2 md:grid-cols-4 gap-6 divide-x divide-black/5 dark:divide-white/10">
               
               <div className="flex flex-col items-center justify-center space-y-1 text-center group px-4">
-                <div className="p-2 bg-saffron/10 rounded-xl group-hover:bg-saffron/20 group-hover:scale-110 transition-all duration-300 mb-2">
+                <div className="p-2 bg-saffron/10 rounded-xl transition-[background-color,transform] duration-300 group-hover:bg-saffron/20 group-hover:scale-110 mb-2">
                   <Star className="w-5 h-5 text-saffron" />
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold text-navy dark:text-white">
@@ -285,7 +286,7 @@ export function Hero() {
               </div>
 
               <div className="flex flex-col items-center justify-center space-y-1 text-center group px-4">
-                <div className="p-2 bg-blue-500/10 rounded-xl group-hover:bg-blue-500/20 group-hover:scale-110 transition-all duration-300 mb-2">
+                <div className="p-2 bg-blue-500/10 rounded-xl group-hover:bg-blue-500/20 group-hover:scale-110 transition-[background-color,transform] duration-300 mb-2">
                   <Ruler className="w-5 h-5 text-blue-500" />
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold text-navy dark:text-white">
@@ -295,7 +296,7 @@ export function Hero() {
               </div>
 
               <div className="flex flex-col items-center justify-center space-y-1 text-center group px-4">
-                <div className="p-2 bg-emerald-500/10 rounded-xl group-hover:bg-emerald-500/20 group-hover:scale-110 transition-all duration-300 mb-2">
+                <div className="p-2 bg-emerald-500/10 rounded-xl group-hover:bg-emerald-500/20 group-hover:scale-110 transition-[background-color,transform] duration-300 mb-2">
                   <Paintbrush className="w-5 h-5 text-emerald-500" />
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold text-navy dark:text-white">
@@ -305,7 +306,7 @@ export function Hero() {
               </div>
 
               <div className="flex flex-col items-center justify-center space-y-1 text-center group px-4">
-                <div className="p-2 bg-purple-500/10 rounded-xl group-hover:bg-purple-500/20 group-hover:scale-110 transition-all duration-300 mb-2">
+                <div className="p-2 bg-purple-500/10 rounded-xl group-hover:bg-purple-500/20 group-hover:scale-110 transition-[background-color,transform] duration-300 mb-2">
                   <Shield className="w-5 h-5 text-purple-500" />
                 </div>
                 <h3 className="text-xl md:text-2xl font-bold text-navy dark:text-white">
@@ -315,7 +316,7 @@ export function Hero() {
               </div>
 
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </section>
     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import * as m from "motion/react-m";
 import { CheckCircle2, ShieldCheck, PenTool, TrendingUp, Clock, Headphones, Gem, FileText } from "lucide-react";
 
 const reasons = [
@@ -64,14 +64,14 @@ export function WhyChooseUs() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {reasons.map((reason, index) => (
-            <motion.div
-              key={index}
+          {reasons.map((reason) => (
+            <m.div
+              key={reason.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-offwhite dark:bg-slate-800/50 rounded-2xl p-6 border border-black/5 dark:border-white/5 hover:border-saffron/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
+              transition={{ duration: 0.5 }}
+              className="bg-offwhite dark:bg-slate-800/50 rounded-2xl p-6 border border-black/5 dark:border-white/5 hover:border-saffron/30 hover:shadow-lg hover:-translate-y-1 transition-[border-color,box-shadow,transform] duration-300 group"
             >
               <div className="w-12 h-12 rounded-xl bg-white dark:bg-slate-800 shadow-sm flex items-center justify-center mb-4 text-navy dark:text-white group-hover:text-saffron group-hover:bg-saffron/10 transition-colors">
                 <reason.icon className="w-6 h-6" />
@@ -80,7 +80,7 @@ export function WhyChooseUs() {
               <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
                 {reason.desc}
               </p>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import * as m from "motion/react-m";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
@@ -70,7 +70,7 @@ export function Services() {
             </h2>
           </div>
           
-          <a href="#projects">
+          <a href="#portfolio">
             <button className="hidden md:inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 py-2 rounded-full border border-black/10 dark:border-white/10 bg-transparent text-navy dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-300 h-10 px-6 sm:h-12 sm:px-8">
               Explore Portfolio
             </button>
@@ -79,8 +79,8 @@ export function Services() {
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mt-12 md:mt-20">
-          {services.map((service, idx) => (
-            <Link key={idx} href={service.href} className="group relative rounded-[2rem] overflow-hidden bg-white dark:bg-slate-800 border border-black/5 dark:border-white/5 aspect-[4/3] md:aspect-[21/9] lg:aspect-[4/3] shadow-sm hover:shadow-xl transition-all duration-500">
+          {services.map((service) => (
+            <Link key={service.title} href={service.href} className="group relative rounded-[2rem] overflow-hidden bg-white dark:bg-slate-800 border border-black/5 dark:border-white/5 aspect-[4/3] md:aspect-[21/9] lg:aspect-[4/3] shadow-sm hover:shadow-xl transition-[box-shadow,transform] duration-500">
               
               {/* Background Image */}
               <div 
@@ -109,7 +109,7 @@ export function Services() {
                         {service.desc}
                       </p>
                     </div>
-                    <div className="w-12 h-12 shrink-0 rounded-full bg-white text-navy flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
+                    <div className="w-12 h-12 shrink-0 rounded-full bg-white text-navy flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-[opacity,transform] duration-500">
                       <ArrowUpRight className="w-6 h-6" />
                     </div>
                   </div>
@@ -119,7 +119,7 @@ export function Services() {
           ))}
         </div>
         
-        <a href="#projects" className="md:hidden mt-8 block w-full">
+        <a href="#portfolio" className="md:hidden mt-8 block w-full">
           <button className="w-full inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 py-2 rounded-full border border-black/10 dark:border-white/10 bg-transparent text-navy dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-300 h-12 px-8">
             Explore Portfolio
           </button>

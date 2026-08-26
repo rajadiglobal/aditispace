@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useMemo, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -28,7 +28,7 @@ export function ConsultationProvider({ children }: { children: React.ReactNode }
   const [open, setOpen] = useState(false);
   const [hasShownPopup, setHasShownPopup] = useState(false);
   const pathname = usePathname();
-  const [prevPath, setPrevPath] = useState(pathname);
+  const prevPathRef = useRef(pathname);
 
   useEffect(() => {
     // Show popup after 3 seconds on first load
@@ -43,20 +43,22 @@ export function ConsultationProvider({ children }: { children: React.ReactNode }
 
   useEffect(() => {
     // Show popup when navigating to a different page with a delay
-    if (pathname !== prevPath) {
+    if (pathname !== prevPathRef.current) {
       const timer = setTimeout(() => {
         setOpen(true);
       }, 4500); // 4.5 second delay after navigation
       
-      setPrevPath(pathname);
+      prevPathRef.current = pathname;
       return () => clearTimeout(timer);
     }
-  }, [pathname, prevPath]);
+  }, [pathname]);
 
   const openModal = () => setOpen(true);
 
+  const contextValue = useMemo(() => ({ open, setOpen, openModal }), [open]);
+
   return (
-    <ConsultationContext.Provider value={{ open, setOpen, openModal }}>
+    <ConsultationContext.Provider value={contextValue}>
       {children}
       <ConsultationModal open={open} onOpenChange={setOpen} />
     </ConsultationContext.Provider>

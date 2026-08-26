@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import * as m from "motion/react-m";
 import { MessageSquareText, Compass, Settings, Hammer } from "lucide-react";
 import { useConsultation } from "../consultation-provider";
 
@@ -63,9 +63,9 @@ export function HowItWorks() {
           {/* Connecting Line */}
           <div className="hidden lg:block absolute top-12 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-black/10 dark:via-white/10 to-transparent z-0"></div>
 
-          {steps.map((step, index) => (
-            <motion.div
-              key={index}
+          {steps.map((step) => (
+            <m.div
+              key={step.num}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -83,7 +83,7 @@ export function HowItWorks() {
               <p className="text-slate-600 dark:text-slate-400 leading-relaxed max-w-xs">
                 {step.desc}
               </p>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

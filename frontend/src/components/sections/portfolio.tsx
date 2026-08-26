@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import * as m from "motion/react-m";
+import { AnimatePresence } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 
@@ -50,7 +51,7 @@ export function Portfolio() {
               <span className="w-1.5 h-1.5 rounded-full bg-saffron"></span>
               <span className="text-sm font-semibold text-navy/80 dark:text-slate-300 tracking-wide">PORTFOLIO</span>
             </div>
-            <motion.h2 
+            <m.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -58,10 +59,10 @@ export function Portfolio() {
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-navy dark:text-white tracking-tight leading-[1.1]"
             >
               Our <span className="italic font-light text-saffron">Design Gallery</span>
-            </motion.h2>
+            </m.h2>
           </div>
           
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -72,7 +73,7 @@ export function Portfolio() {
               <button
                 key={category}
                 onClick={() => setActiveCategory(category)}
-                className={`px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 border ${
+                className={`px-6 py-2 rounded-full text-sm font-medium transition-[background-color,border-color,transform] duration-300 border ${
                   activeCategory === category
                     ? "bg-navy text-white border-navy dark:bg-white dark:text-navy dark:border-white"
                     : "bg-transparent text-navy/70 dark:text-slate-400 border-black/10 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/10"
@@ -81,10 +82,10 @@ export function Portfolio() {
                 {category}
               </button>
             ))}
-          </motion.div>
+          </m.div>
         </div>
 
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[300px]">
+        <m.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[300px]">
           <AnimatePresence>
             {filteredProjects.map((project, index) => {
               let gridClass = "col-span-1 row-span-1";
@@ -95,14 +96,14 @@ export function Portfolio() {
               }
               
               return (
-                <motion.div
+                <m.div
                   layout
                   key={project.id}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.4 }}
-                  className={`group relative overflow-hidden rounded-[2rem] bg-slate-100 dark:bg-slate-800 ${gridClass} shadow-sm hover:shadow-xl transition-all duration-500`}
+                  className={`group relative overflow-hidden rounded-[2rem] bg-slate-100 dark:bg-slate-800 ${gridClass} shadow-sm hover:shadow-xl transition-[box-shadow,transform] duration-500`}
                 >
                   <Image 
                     src={project.image}
@@ -114,7 +115,7 @@ export function Portfolio() {
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/30 to-transparent opacity-60 group-hover:opacity-90 transition-opacity duration-500" />
                   
                   <div className="absolute bottom-0 left-0 w-full p-8 flex flex-col justify-end h-full">
-                    <span className="text-saffron text-xs font-bold tracking-widest uppercase mb-2 block opacity-0 -translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+                    <span className="text-saffron text-xs font-bold tracking-widest uppercase mb-2 block opacity-0 -translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-[opacity,transform] duration-500">
                       {project.category}
                     </span>
                     <h3 className="font-heading text-2xl font-bold text-white flex items-center justify-between opacity-90 group-hover:opacity-100 transition-opacity">
@@ -124,11 +125,11 @@ export function Portfolio() {
                       </span>
                     </h3>
                   </div>
-                </motion.div>
+                </m.div>
               );
             })}
           </AnimatePresence>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

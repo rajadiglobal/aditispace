@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import * as m from "motion/react-m";
 import { Star, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
@@ -61,19 +61,19 @@ export function TestimonialsFAQ() {
             <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white dark:from-slate-900 to-transparent z-10 pointer-events-none"></div>
             <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white dark:from-slate-900 to-transparent z-10 pointer-events-none"></div>
             
-            <motion.div 
+            <m.div 
               className="flex gap-6 md:gap-8 px-4 w-max"
               animate={{ x: ["0%", "-50%"] }}
               transition={{ repeat: Infinity, ease: "linear", duration: 40 }}
             >
-              {[...testimonials, ...testimonials].map((testimonial, idx) => (
+              {testimonials.map((testimonial) => (
                 <div
-                  key={idx}
+                  key={`a-${testimonial.name}`}
                   className="w-[320px] md:w-[450px] shrink-0 bg-slate-50 dark:bg-slate-800 p-8 md:p-10 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex gap-1 mb-6 text-saffron">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} size={18} fill="currentColor" />
+                    {[1,2,3,4,5].slice(0, testimonial.rating).map((star) => (
+                      <Star key={star} size={18} fill="currentColor" />
                     ))}
                   </div>
                   <p className="text-navy/90 dark:text-white/90 text-lg font-light italic mb-8 leading-relaxed line-clamp-4">
@@ -90,7 +90,31 @@ export function TestimonialsFAQ() {
                   </div>
                 </div>
               ))}
-            </motion.div>
+              {testimonials.map((testimonial) => (
+                <div
+                  key={`b-${testimonial.name}`}
+                  className="w-[320px] md:w-[450px] shrink-0 bg-slate-50 dark:bg-slate-800 p-8 md:p-10 rounded-[2rem] border border-black/5 dark:border-white/5 shadow-sm hover:shadow-md transition-shadow"
+                >
+                  <div className="flex gap-1 mb-6 text-saffron">
+                    {[1,2,3,4,5].slice(0, testimonial.rating).map((star) => (
+                      <Star key={star} size={18} fill="currentColor" />
+                    ))}
+                  </div>
+                  <p className="text-navy/90 dark:text-white/90 text-lg font-light italic mb-8 leading-relaxed line-clamp-4">
+                    &quot;{testimonial.content}&quot;
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden shrink-0">
+                      <Image src={testimonial.image} alt={testimonial.name} fill sizes="48px" className="object-cover" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-navy dark:text-white">{testimonial.name}</h4>
+                      <p className="text-sm text-slate-600 dark:text-slate-400">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </m.div>
           </div>
         </div>
       </section>
@@ -100,7 +124,7 @@ export function TestimonialsFAQ() {
           
           {/* Full Width Header, Aligned Compactly */}
           <div className="max-w-7xl mx-auto mb-10 flex flex-col items-center text-center">
-            <motion.div 
+            <m.div 
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -112,9 +136,9 @@ export function TestimonialsFAQ() {
                 Information
               </span>
               <div className="w-8 h-[1px] bg-saffron hidden md:block"></div>
-            </motion.div>
+            </m.div>
             
-            <motion.h2 
+            <m.h2 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -122,7 +146,7 @@ export function TestimonialsFAQ() {
               className="font-heading text-3xl md:text-5xl font-light text-navy dark:text-white leading-tight"
             >
               Frequently <span className="italic text-slate-500 dark:text-slate-400">Asked Questions</span>
-            </motion.h2>
+            </m.h2>
           </div>
 
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 max-w-7xl mx-auto">
@@ -131,14 +155,14 @@ export function TestimonialsFAQ() {
             <div className="lg:w-5/12 lg:sticky lg:top-32 h-fit">
               <div className="space-y-4">
                 {faqs.map((faq, idx) => (
-                  <motion.button
-                    key={idx}
+                  <m.button
+                    key={faq.question}
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 * idx, duration: 0.5 }}
                     onClick={() => setOpenFaqIndex(idx)}
-                    className={`w-full group text-left px-6 py-5 rounded-xl transition-all duration-300 border flex items-center justify-between ${
+                    className={`w-full group text-left px-6 py-5 rounded-xl transition-[background-color,border-color] duration-300 border flex items-center justify-between ${
                       openFaqIndex === idx 
                         ? 'bg-saffron text-white border-transparent' 
                         : 'bg-slate-50 dark:bg-slate-800/30 text-navy dark:text-white border-black/5 dark:border-white/5 hover:border-saffron'
@@ -152,7 +176,7 @@ export function TestimonialsFAQ() {
                           : 'opacity-0 group-hover:opacity-100 text-saffron'
                       }`} 
                     />
-                  </motion.button>
+                  </m.button>
                 ))}
               </div>
             </div>
@@ -160,7 +184,7 @@ export function TestimonialsFAQ() {
             {/* Right Column: Answer Display */}
             <div className="lg:w-7/12 flex items-start">
               {openFaqIndex !== null && (
-                <motion.div
+                <m.div
                   key={openFaqIndex}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -175,7 +199,7 @@ export function TestimonialsFAQ() {
                       {faqs[openFaqIndex].answer}
                     </p>
                   </div>
-                </motion.div>
+                </m.div>
               )}
             </div>
 

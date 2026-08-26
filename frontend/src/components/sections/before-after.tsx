@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { motion, useInView } from "framer-motion";
+import * as m from "motion/react-m";
+import { useInView } from "motion/react";
 import { ArrowLeftRight, Play, Pause, RotateCcw, Sparkles } from "lucide-react";
 import Image from "next/image";
 
@@ -166,7 +167,7 @@ export function BeforeAfter() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header section */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -189,7 +190,7 @@ export function BeforeAfter() {
               <button
                 key={project.id}
                 onClick={() => handleSelectProject(idx)}
-                className={`px-5 py-2 rounded-full text-xs md:text-sm font-medium transition-all duration-300 ${
+                className={`px-5 py-2 rounded-full text-xs md:text-sm font-medium transition-[background-color,color,transform,box-shadow] duration-300 ${
                   activeProjectIndex === idx
                     ? "bg-amber-500 text-neutral-950 shadow-lg shadow-amber-500/20 scale-105"
                     : "bg-white/5 hover:bg-white/10 text-neutral-300 border border-white/10"
@@ -199,10 +200,10 @@ export function BeforeAfter() {
               </button>
             ))}
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Main transformation display */}
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.96 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -211,6 +212,12 @@ export function BeforeAfter() {
         >
           <div
             ref={containerRef}
+            role="slider"
+            aria-label="Before and after transformation slider"
+            aria-valuenow={Math.round(sliderPosition)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            tabIndex={0}
             className="relative w-full aspect-[4/3] md:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl cursor-ew-resize group border border-white/10 select-none"
             onMouseMove={handleMove}
             onTouchMove={handleMove}
@@ -223,6 +230,7 @@ export function BeforeAfter() {
                 src={activeProject.beforeImage}
                 alt={`${activeProject.title} Before Transformation`}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
                 className="object-cover pointer-events-none"
                 priority
               />
@@ -240,6 +248,7 @@ export function BeforeAfter() {
                 src={activeProject.afterImage}
                 alt={`${activeProject.title} After Transformation`}
                 fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
                 className="object-cover"
                 priority
               />
@@ -286,7 +295,7 @@ export function BeforeAfter() {
             <div className="flex items-center gap-3 shrink-0">
               <button
                 onClick={togglePlayPause}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-medium transition-all border border-white/10 active:scale-95"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-medium transition-[background-color] duration-300 border border-white/10 active:scale-95"
               >
                 {isPlaying ? (
                   <>
@@ -301,13 +310,13 @@ export function BeforeAfter() {
 
               <button
                 onClick={handleReplay}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-neutral-950 text-xs font-semibold transition-all shadow-md shadow-amber-500/20 active:scale-95"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-neutral-950 text-xs font-semibold transition-[background-color,box-shadow] shadow-md shadow-amber-500/20 active:scale-95"
               >
                 <RotateCcw className="w-3.5 h-3.5" /> Replay
               </button>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

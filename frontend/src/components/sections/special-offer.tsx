@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import * as m from "motion/react-m";
 import { ArrowRight } from "lucide-react";
 import { useConsultation } from "../consultation-provider";
 
@@ -14,7 +14,7 @@ export function SpecialOffer() {
       <div className="absolute inset-0 bg-navy/80 dark:bg-slate-900/90 mix-blend-multiply"></div>
       
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10">
-        <motion.div
+        <m.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
@@ -39,7 +39,7 @@ export function SpecialOffer() {
           
           <button 
             onClick={openModal}
-            className="group relative px-8 py-4 bg-white text-navy hover:bg-saffron hover:text-white rounded-full font-bold transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,153,51,0.5)] flex items-center justify-center gap-3 overflow-hidden text-lg"
+            className="group relative px-8 py-4 bg-white text-navy hover:bg-saffron hover:text-white rounded-full font-bold transition-[background-color,color,box-shadow] duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,153,51,0.5)] flex items-center justify-center gap-3 overflow-hidden text-lg"
           >
             <span className="relative z-10 flex items-center gap-2">
               Claim My Offer
@@ -48,7 +48,7 @@ export function SpecialOffer() {
           </button>
           
           <p className="text-[10px] text-white/50 mt-6 tracking-wide">*Terms & conditions apply.</p>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );
