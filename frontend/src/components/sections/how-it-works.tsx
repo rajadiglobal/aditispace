@@ -63,7 +63,7 @@ export function HowItWorks() {
           {/* Connecting Line */}
           <div className="hidden lg:block absolute top-12 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-black/10 dark:via-white/10 to-transparent z-0"></div>
 
-          {steps.map((step) => (
+          {steps.map((step, index) => (
             <m.div
               key={step.num}
               initial={{ opacity: 0, y: 30 }}
