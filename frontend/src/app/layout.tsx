@@ -2,11 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { ConsultationProvider } from "@/components/consultation-provider";
-import { WhatsAppWidget } from "@/components/whatsapp-widget";
 import { MotionProvider } from "@/components/motion-provider";
+import { Providers } from "@/app/providers";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -31,23 +28,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${playfair.variable} h-full`}>
       <body className="min-h-full flex flex-col antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ConsultationProvider>
+        <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
             <MotionProvider>
-              <Header />
-              <main className="flex-1">
-                {children}
-              </main>
-              <Footer />
-              <WhatsAppWidget />
+              {children}
             </MotionProvider>
-          </ConsultationProvider>
-        </ThemeProvider>
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

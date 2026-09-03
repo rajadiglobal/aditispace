@@ -10,12 +10,14 @@ import { SpecialOffer } from "@/components/sections/special-offer";
 import { TestimonialsFAQ } from "@/components/sections/testimonials-faq";
 import { ContactSection } from "@/components/sections/contact";
 import { FinalCTA } from "@/components/sections/final-cta";
+import { FeaturedProducts } from "@/components/sections/featured-products";
 
 export default function Home() {
   return (
     <div className="flex flex-col">
       <Hero />
       <LogoTicker />
+      <FeaturedProducts />
       <Services />
       <WhyChooseUs />
       <BeforeAfter />

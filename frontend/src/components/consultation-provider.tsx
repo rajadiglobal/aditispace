@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, useMemo, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { X, CheckCircle2 } from "lucide-react";
+import { leadService } from "@/services/leadService";
 
 type ConsultationContextType = {
   open: boolean;
@@ -25,12 +27,15 @@ export function useConsultation() {
 }
 
 export function ConsultationProvider({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession();
   const [open, setOpen] = useState(false);
   const [hasShownPopup, setHasShownPopup] = useState(false);
   const pathname = usePathname();
   const prevPathRef = useRef(pathname);
 
   useEffect(() => {
+    if (status === "loading" || session) return; // Do not show if logged in
+
     // Show popup after 3 seconds on first load
     const timer = setTimeout(() => {
       if (!hasShownPopup) {
@@ -39,9 +44,11 @@ export function ConsultationProvider({ children }: { children: React.ReactNode }
       }
     }, 3000);
     return () => clearTimeout(timer);
-  }, [hasShownPopup]);
+  }, [hasShownPopup, session, status]);
 
   useEffect(() => {
+    if (status === "loading" || session) return; // Do not show if logged in
+
     // Show popup when navigating to a different page with a delay
     if (pathname !== prevPathRef.current) {
       const timer = setTimeout(() => {
@@ -51,7 +58,7 @@ export function ConsultationProvider({ children }: { children: React.ReactNode }
       prevPathRef.current = pathname;
       return () => clearTimeout(timer);
     }
-  }, [pathname]);
+  }, [pathname, session, status]);
 
   const openModal = () => setOpen(true);
 
@@ -68,16 +75,31 @@ export function ConsultationProvider({ children }: { children: React.ReactNode }
 function ConsultationModal({ open, onOpenChange }: { open: boolean, onOpenChange: (open: boolean) => void }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [requirement, setRequirement] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setIsSuccess(true);
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    try {
+      const { formService } = await import('@/services/formService');
+      await formService.submitConsultation({
+        requirement_type: requirement || "Not specified",
+        city: (data.get("city") as string) || "Not specified",
+        name: data.get("name") as string,
+        email: data.get("email") as string,
+        phone: (data.get("mobile") as string) || "0000000000",
+        preferred_date: (data.get("date") as string) || undefined
+      });
+      setIsSuccess(true);
+      toast.success("Consultation request received! We'll contact you soon.");
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -135,34 +157,34 @@ function ConsultationModal({ open, onOpenChange }: { open: boolean, onOpenChange
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
-                    <Input id="name" required placeholder="John Doe" className="bg-muted/50 border-muted focus-visible:ring-accent" />
+                    <Input id="name" name="name" required placeholder="John Doe" className="bg-muted/50 border-muted focus-visible:ring-accent" />
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="mobile">Mobile Number</Label>
-                      <Input id="mobile" type="tel" required placeholder="+91 91104 47020" className="bg-muted/50 border-muted focus-visible:ring-accent" />
+                      <Input id="mobile" name="mobile" type="tel" required placeholder="+91 91104 47020" className="bg-muted/50 border-muted focus-visible:ring-accent" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email Address</Label>
-                      <Input id="email" type="email" required placeholder="john@example.com" className="bg-muted/50 border-muted focus-visible:ring-accent" />
+                      <Input id="email" name="email" type="email" required placeholder="john@example.com" className="bg-muted/50 border-muted focus-visible:ring-accent" />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="city">City / Location</Label>
-                      <Input id="city" required placeholder="Noida Sector 46" className="bg-muted/50 border-muted focus-visible:ring-accent" />
+                      <Input id="city" name="city" required placeholder="Noida Sector 46" className="bg-muted/50 border-muted focus-visible:ring-accent" />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="date">Preferred Date</Label>
-                      <Input id="date" type="date" required className="bg-muted/50 border-muted focus-visible:ring-accent" />
+                      <Input id="date" name="date" type="date" required className="bg-muted/50 border-muted focus-visible:ring-accent" />
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="requirement">What are you looking for?</Label>
-                    <Select required>
+                    <Select required onValueChange={(val) => setRequirement(val)} value={requirement ?? ""}>
                       <SelectTrigger className="bg-muted/50 border-muted focus-visible:ring-accent">
                         <SelectValue placeholder="Select requirement" />
                       </SelectTrigger>

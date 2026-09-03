@@ -16,30 +16,20 @@ export function ContactSection() {
     
     const formData = new FormData(e.target as HTMLFormElement);
     const data = {
-      firstName: formData.get('firstName'),
-      lastName: formData.get('lastName'),
-      email: formData.get('email'),
-      phone: formData.get('phone'),
-      message: formData.get('message'),
+      firstName: formData.get('firstName') as string,
+      lastName: formData.get('lastName') as string,
+      email: formData.get('email') as string,
+      phone: (formData.get('phone') as string) || undefined,
+      message: formData.get('message') as string,
     };
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        setIsSuccess(true);
-      } else {
-        console.error('Failed to submit form');
-        // Handle error visually if needed
-      }
+      const { formService } = await import('@/services/formService');
+      await formService.submitContact(data);
+      setIsSuccess(true);
     } catch (error) {
       console.error('Error submitting form:', error);
+      // You could add toast notification here
     } finally {
       setIsSubmitting(false);
     }

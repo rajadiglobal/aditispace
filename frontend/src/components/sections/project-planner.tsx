@@ -4,17 +4,78 @@ import { useState } from "react";
 import * as m from "motion/react-m";
 import { AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, ChevronLeft, Building, Home, PaintBucket, Briefcase, CheckCircle2 } from "lucide-react";
-
-// Types
-type ProjectType = "Residential" | "Commercial" | "Hospitality" | "Renovation" | null;
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { ChevronRight, ChevronLeft, Building, Home, PaintBucket, Briefcase, CheckCircle2, User, MapPin } from "lucide-react";
+import { RequirementPayload } from "@/services/formService";
+import { toast } from "sonner";
 
 export function ProjectPlanner() {
   const [step, setStep] = useState(1);
-  const [projectType, setProjectType] = useState<ProjectType>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleNext = () => setStep((s) => Math.min(s + 1, 4));
+  // Form State
+  const [propertyType, setPropertyType] = useState<string>("");
+  const [propertyStatus, setPropertyStatus] = useState<string>("");
+  const [scope, setScope] = useState<string>("");
+  const [propertySize, setPropertySize] = useState<string>("");
+  const [budgetRange, setBudgetRange] = useState<string>("");
+  const [timeline, setTimeline] = useState<string>("");
+
+  const [customerInfo, setCustomerInfo] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    city: "",
+    notes: ""
+  });
+
+  const handleNext = () => setStep((s) => Math.min(s + 1, 6));
   const handlePrev = () => setStep((s) => Math.max(s - 1, 1));
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      const { formService } = await import('@/services/formService');
+      const payload: RequirementPayload = {
+        customer_name: customerInfo.name,
+        customer_email: customerInfo.email,
+        customer_phone: customerInfo.phone,
+        location_city: customerInfo.city,
+        property_type: propertyType,
+        property_status: propertyStatus,
+        scope: scope,
+        property_size: propertySize,
+        budget_range: budgetRange,
+        timeline: timeline,
+        additional_notes: customerInfo.notes
+      };
+      
+      await formService.submitRequirement(payload);
+      setIsSuccess(true);
+      setStep(6);
+    } catch (error) {
+      console.error('Error submitting planner:', error);
+      toast.error("Failed to submit. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const isStepValid = () => {
+    switch (step) {
+      case 1: return propertyType !== "";
+      case 2: return propertyStatus !== "";
+      case 3: return scope !== "" && propertySize !== "";
+      case 4: return budgetRange !== "" && timeline !== "";
+      case 5: return true; // Handled by form required attributes
+      default: return true;
+    }
+  };
 
   return (
     <section id="project-planner" className="py-12 md:py-16 bg-offwhite dark:bg-[#050B14] relative overflow-hidden">
@@ -61,101 +122,80 @@ export function ProjectPlanner() {
           className="bg-white dark:bg-slate-900 border border-black/10 dark:border-white/10 shadow-2xl rounded-[2rem] p-8 md:p-12 min-h-[500px] flex flex-col relative"
         >
           {/* Progress Indicator */}
-          <div className="flex items-center justify-between mb-12">
-            <div className="flex items-center gap-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="flex items-center">
-                  <div 
-                    className={`w-10 h-1 rounded-full transition-colors duration-500 ${
-                      i <= step ? "bg-saffron" : "bg-slate-200 dark:bg-slate-800"
-                    }`}
-                  />
-                  {i < 4 && <div className="w-2" />}
-                </div>
-              ))}
+          {step < 6 && (
+            <div className="flex items-center justify-between mb-12">
+              <div className="flex items-center gap-2 flex-wrap">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="flex items-center">
+                    <div 
+                      className={`w-8 sm:w-10 h-1 rounded-full transition-colors duration-500 ${
+                        i <= step ? "bg-saffron" : "bg-slate-200 dark:bg-slate-800"
+                      }`}
+                    />
+                    {i < 5 && <div className="w-1 sm:w-2" />}
+                  </div>
+                ))}
+              </div>
+              <span className="text-sm font-medium text-slate-500 dark:text-slate-400 shrink-0 ml-4">
+                Step {step} of 5
+              </span>
             </div>
-            <span className="text-sm font-medium text-slate-500 dark:text-slate-400">
-              Step {step} of 4
-            </span>
-          </div>
+          )}
 
           {/* Form Content Steps */}
           <div className="flex-grow flex flex-col justify-center">
             <AnimatePresence mode="wait">
               {step === 1 && (
-                <m.div
-                  key="step1"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <h3 className="font-heading text-3xl font-bold text-navy dark:text-white mb-2">
-                    What type of property are we designing?
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400 mb-8">
-                    Select the main focus of your project.
-                  </p>
+                <m.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.4 }}>
+                  <h3 className="font-heading text-3xl font-bold text-navy dark:text-white mb-2">What type of property are we designing?</h3>
+                  <p className="text-slate-600 dark:text-slate-400 mb-8">Select the main focus of your project.</p>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[
-                      { id: "Residential", icon: Home, desc: "Villas, Apartments, Penthouses" },
-                      { id: "Commercial", icon: Building, desc: "Offices, Retail Spaces" },
-                      { id: "Hospitality", icon: Briefcase, desc: "Hotels, Restaurants, Cafes" },
-                      { id: "Renovation", icon: PaintBucket, desc: "Remodeling, Upgrades" },
-                    ].map((type) => {
-                      const Icon = type.icon;
-                      const isSelected = projectType === type.id;
-                      
-                      return (
-                        <button
-                          key={type.id}
-                          onClick={() => setProjectType(type.id as ProjectType)}
-                          className={`flex items-start gap-4 p-6 rounded-2xl border-2 text-left transition-[border-color,background-color] duration-300 ${
-                            isSelected 
-                              ? "border-saffron bg-saffron/5" 
-                              : "border-black/5 dark:border-white/5 hover:border-saffron/30 hover:bg-slate-50 dark:hover:bg-slate-800/50"
-                          }`}
-                        >
-                          <div className={`p-3 rounded-full ${isSelected ? "bg-saffron text-white" : "bg-slate-100 dark:bg-slate-800 text-navy dark:text-white"}`}>
-                            <Icon size={24} />
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-lg text-navy dark:text-white">{type.id}</h4>
-                            <p className="text-sm text-slate-600 dark:text-slate-400">{type.desc}</p>
-                          </div>
-                        </button>
-                      );
-                    })}
+                      { id: "Apartment", icon: Home, desc: "Flats & Apartments" },
+                      { id: "Villa", icon: Home, desc: "Independent Villas" },
+                      { id: "Independent House", icon: Building, desc: "Standalone houses" },
+                      { id: "Penthouse", icon: Home, desc: "Luxury penthouses" },
+                      { id: "Office", icon: Briefcase, desc: "Commercial workspaces" },
+                      { id: "Retail/Commercial", icon: Building, desc: "Shops & Boutiques" },
+                    ].map((type) => (
+                      <button
+                        key={type.id}
+                        onClick={() => { setPropertyType(type.id); setTimeout(handleNext, 300); }}
+                        className={`flex items-start gap-4 p-6 rounded-2xl border-2 text-left transition-[border-color,background-color] duration-300 ${propertyType === type.id ? "border-saffron bg-saffron/5" : "border-black/5 dark:border-white/5 hover:border-saffron/30"}`}
+                      >
+                        <div className={`p-3 rounded-full ${propertyType === type.id ? "bg-saffron text-white" : "bg-slate-100 dark:bg-slate-800 text-navy dark:text-white"}`}>
+                          <type.icon size={24} />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-lg text-navy dark:text-white">{type.id}</h4>
+                          <p className="text-sm text-slate-600 dark:text-slate-400">{type.desc}</p>
+                        </div>
+                      </button>
+                    ))}
                   </div>
                 </m.div>
               )}
 
               {step === 2 && (
-                <m.div
-                  key="step2"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <h3 className="font-heading text-3xl font-bold text-navy dark:text-white mb-2">
-                    {projectType === "Residential" ? "What size is your home?" : 
-                     projectType === "Commercial" ? "How large is your workspace?" : 
-                     "What is the scale of the project?"}
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400 mb-8">
-                    This helps us estimate the timeline and resources.
-                  </p>
+                <m.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.4 }}>
+                  <h3 className="font-heading text-3xl font-bold text-navy dark:text-white mb-2">What is the status of your property?</h3>
+                  <p className="text-slate-600 dark:text-slate-400 mb-8">This helps us plan the right timeline for you.</p>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {["Small (Under 1000 sqft)", "Medium (1000 - 3000 sqft)", "Large (Over 3000 sqft)"].map((size) => (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                      "Planning to buy",
+                      "Recently purchased",
+                      "Under construction",
+                      "Ready to move",
+                      "Renovation"
+                    ].map((status) => (
                       <button
-                        key={size}
-                        className="p-6 rounded-2xl border-2 border-black/5 dark:border-white/5 text-center hover:border-saffron hover:bg-saffron/5 transition-[border-color,background-color] duration-300"
+                        key={status}
+                        onClick={() => { setPropertyStatus(status); setTimeout(handleNext, 300); }}
+                        className={`p-6 rounded-2xl border-2 text-center transition-[border-color,background-color] duration-300 ${propertyStatus === status ? "border-saffron bg-saffron/5 text-navy dark:text-white font-semibold" : "border-black/5 dark:border-white/5 hover:border-saffron/30 text-slate-600 dark:text-slate-300"}`}
                       >
-                        <span className="font-medium text-navy dark:text-white">{size.split(" ")[0]}</span>
-                        <span className="block text-xs text-slate-500 dark:text-slate-400 mt-2">{size.substring(size.indexOf("("))}</span>
+                        {status}
                       </button>
                     ))}
                   </div>
@@ -163,79 +203,166 @@ export function ProjectPlanner() {
               )}
 
               {step === 3 && (
-                <m.div
-                  key="step3"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <h3 className="font-heading text-3xl font-bold text-navy dark:text-white mb-2">
-                    What budget range are you comfortable with?
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400 mb-8">
-                    We tailor our design solutions to respect your investment.
-                  </p>
+                <m.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.4 }}>
+                  <h3 className="font-heading text-3xl font-bold text-navy dark:text-white mb-2">Scope & Size</h3>
+                  <p className="text-slate-600 dark:text-slate-400 mb-8">Tell us what needs to be designed and the approximate size.</p>
                   
-                  <div className="flex flex-col gap-4">
-                    {["$20,000 - $50,000", "$50,000 - $150,000", "$150,000 - $500,000", "$500,000+"].map((budget) => (
-                      <button
-                        key={budget}
-                        className="p-4 rounded-xl border border-black/10 dark:border-white/10 text-left hover:border-saffron hover:bg-saffron/5 transition-[border-color,background-color] duration-300"
-                      >
-                        <span className="font-medium text-navy dark:text-white text-lg">{budget}</span>
-                      </button>
-                    ))}
+                  <div className="space-y-6">
+                    <div>
+                      <Label className="text-base mb-3 block">What is the scope of the project?</Label>
+                      <div className="grid grid-cols-2 gap-3">
+                        {["Full Home Interior", "Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Commercial Interior", "Other"].map((s) => (
+                          <button
+                            key={s}
+                            onClick={() => setScope(s)}
+                            className={`p-3 rounded-xl border-2 text-sm transition-[border-color,background-color] duration-300 ${scope === s ? "border-saffron bg-saffron/5 text-navy dark:text-white font-semibold" : "border-black/5 dark:border-white/5 hover:border-saffron/30 text-slate-600 dark:text-slate-300"}`}
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Label className="text-base mb-3 block">Approximate property size?</Label>
+                      <div className="grid grid-cols-2 gap-3">
+                        {["Under 500 sq ft", "500–1000 sq ft", "1000–1500 sq ft", "1500–2500 sq ft", "2500–4000 sq ft", "4000+ sq ft"].map((size) => (
+                          <button
+                            key={size}
+                            onClick={() => setPropertySize(size)}
+                            className={`p-3 rounded-xl border-2 text-sm transition-[border-color,background-color] duration-300 ${propertySize === size ? "border-saffron bg-saffron/5 text-navy dark:text-white font-semibold" : "border-black/5 dark:border-white/5 hover:border-saffron/30 text-slate-600 dark:text-slate-300"}`}
+                          >
+                            {size}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </m.div>
               )}
 
               {step === 4 && (
-                <m.div
-                  key="step4"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.4 }}
-                  className="text-center py-12"
-                >
+                <m.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.4 }}>
+                  <h3 className="font-heading text-3xl font-bold text-navy dark:text-white mb-2">Budget & Timeline</h3>
+                  <p className="text-slate-600 dark:text-slate-400 mb-8">Help us tailor the design to your budget constraints.</p>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <Label className="text-base mb-3 block">Estimated Budget (INR)</Label>
+                      <div className="grid grid-cols-2 gap-3">
+                        {["Under ₹5 Lakhs", "₹5–10 Lakhs", "₹10–20 Lakhs", "₹20–40 Lakhs", "₹40–75 Lakhs", "₹75 Lakhs+", "Not Decided"].map((budget) => (
+                          <button
+                            key={budget}
+                            onClick={() => setBudgetRange(budget)}
+                            className={`p-3 rounded-xl border-2 text-sm transition-[border-color,background-color] duration-300 ${budgetRange === budget ? "border-saffron bg-saffron/5 text-navy dark:text-white font-semibold" : "border-black/5 dark:border-white/5 hover:border-saffron/30 text-slate-600 dark:text-slate-300"}`}
+                          >
+                            {budget}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label className="text-base mb-3 block">When would you like to start?</Label>
+                      <div className="grid grid-cols-2 gap-3">
+                        {["Immediately", "Within 1 Month", "1–3 Months", "3–6 Months", "6+ Months", "Not Decided"].map((t) => (
+                          <button
+                            key={t}
+                            onClick={() => setTimeline(t)}
+                            className={`p-3 rounded-xl border-2 text-sm transition-[border-color,background-color] duration-300 ${timeline === t ? "border-saffron bg-saffron/5 text-navy dark:text-white font-semibold" : "border-black/5 dark:border-white/5 hover:border-saffron/30 text-slate-600 dark:text-slate-300"}`}
+                          >
+                            {t}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </m.div>
+              )}
+
+              {step === 5 && (
+                <m.div key="step5" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.4 }}>
+                  <h3 className="font-heading text-3xl font-bold text-navy dark:text-white mb-2">Final Details</h3>
+                  <p className="text-slate-600 dark:text-slate-400 mb-6">Leave your details so our design experts can prepare for your consultation.</p>
+                  
+                  <form id="plannerForm" onSubmit={handleSubmit} className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Full Name *</Label>
+                        <Input required value={customerInfo.name} onChange={e => setCustomerInfo({...customerInfo, name: e.target.value})} placeholder="Rahul Sharma" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Email Address *</Label>
+                        <Input required type="email" value={customerInfo.email} onChange={e => setCustomerInfo({...customerInfo, email: e.target.value})} placeholder="rahul@example.com" />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Phone Number *</Label>
+                        <Input required type="tel" value={customerInfo.phone} onChange={e => setCustomerInfo({...customerInfo, phone: e.target.value})} placeholder="+91 98765 43210" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>City *</Label>
+                        <Input required value={customerInfo.city} onChange={e => setCustomerInfo({...customerInfo, city: e.target.value})} placeholder="Mumbai" />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Additional Requirements (Optional)</Label>
+                      <Textarea value={customerInfo.notes} onChange={e => setCustomerInfo({...customerInfo, notes: e.target.value})} placeholder="Any specific themes or requirements?" rows={3} />
+                    </div>
+                  </form>
+                </m.div>
+              )}
+
+              {step === 6 && (
+                <m.div key="step6" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4 }} className="text-center py-12">
                   <div className="w-20 h-20 rounded-full bg-green-500/10 text-green-500 flex items-center justify-center mx-auto mb-6">
                     <CheckCircle2 size={40} />
                   </div>
-                  <h3 className="font-heading text-3xl font-bold text-navy dark:text-white mb-4">
-                    Almost there!
-                  </h3>
+                  <h3 className="font-heading text-3xl font-bold text-navy dark:text-white mb-4">Request Submitted!</h3>
                   <p className="text-slate-600 dark:text-slate-400 mb-8 max-w-md mx-auto">
-                    We have enough information to get started. Our senior design consultant will contact you shortly to discuss your vision in detail.
+                    Thank you, {customerInfo.name}. We have received your detailed requirements. Our senior design consultant will contact you shortly.
                   </p>
-                  <Button size="lg" className="bg-navy text-white hover:bg-navy/90 dark:bg-white dark:text-navy dark:hover:bg-slate-200 px-8 py-6 text-lg rounded-full">
-                    Submit Project Request
-                  </Button>
                 </m.div>
               )}
             </AnimatePresence>
           </div>
 
           {/* Navigation Buttons */}
-          {step < 4 && (
+          {step < 6 && (
             <div className="flex items-center justify-between mt-12 pt-8 border-t border-black/10 dark:border-white/10">
               <Button 
                 variant="ghost" 
                 onClick={handlePrev}
-                disabled={step === 1}
+                disabled={step === 1 || isSubmitting}
                 className="text-slate-500 hover:text-navy dark:text-slate-400 dark:hover:text-white"
               >
                 <ChevronLeft className="w-4 h-4 mr-2" />
                 Back
               </Button>
-              <Button 
-                onClick={handleNext}
-                disabled={step === 1 && !projectType}
-                className="bg-saffron text-white hover:bg-saffron/90 rounded-full px-8"
-              >
-                Next Step
-                <ChevronRight className="w-4 h-4 ml-2" />
-              </Button>
+              
+              {step < 5 ? (
+                <Button 
+                  onClick={handleNext}
+                  disabled={!isStepValid()}
+                  className="bg-saffron text-white hover:bg-saffron/90 rounded-full px-8"
+                >
+                  Next Step
+                  <ChevronRight className="w-4 h-4 ml-2" />
+                </Button>
+              ) : (
+                <Button 
+                  type="submit"
+                  form="plannerForm"
+                  disabled={isSubmitting || !customerInfo.name || !customerInfo.email || !customerInfo.phone}
+                  className="bg-navy text-white hover:bg-navy/90 dark:bg-white dark:text-navy rounded-full px-8"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit Project"}
+                  {!isSubmitting && <CheckCircle2 className="w-4 h-4 ml-2" />}
+                </Button>
+              )}
             </div>
           )}
         </m.div>

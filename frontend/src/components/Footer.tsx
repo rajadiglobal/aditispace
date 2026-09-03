@@ -6,10 +6,26 @@ import { useState } from "react";
 
 export function Footer() {
   const [isSubscribed, setIsSubscribed] = useState(false);
-  
-  const handleSubscribe = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubscribed(true);
+    const form = e.target as HTMLFormElement;
+    const email = (form.elements.namedItem("newsletter-email") as HTMLInputElement).value;
+    
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const { formService } = await import('@/services/formService');
+      await formService.subscribeNewsletter({ email, source: 'footer' });
+      setIsSubscribed(true);
+    } catch (err) {
+      console.error("Newsletter error:", err);
+      setError("Failed to subscribe. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return (
     <footer className="relative bg-slate-50 dark:bg-[#050B14] text-navy dark:text-white pt-12 pb-4 overflow-hidden border-t border-black/10 dark:border-white/10 mt-auto">
@@ -38,21 +54,27 @@ export function Footer() {
                 <span className="font-medium text-sm">Thanks for subscribing!</span>
               </div>
             ) : (
-              <form className="flex w-full md:w-auto relative mt-4 md:mt-0" onSubmit={handleSubscribe}>
-                <label htmlFor="newsletter-email" className="sr-only">Email address</label>
-                <input
-                  id="newsletter-email"
-                  type="email"
-                  placeholder="Enter your email address"
-                  required
-                  className="w-full md:w-[320px] bg-white dark:bg-black/20 backdrop-blur-md border border-black/10 dark:border-white/10 text-slate-800 dark:text-white pl-5 pr-[110px] py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-saffron/50 focus:border-saffron/50 transition placeholder:text-slate-400 dark:placeholder:text-white/40 shadow-inner text-sm"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-1.5 top-1.5 bottom-1.5 bg-saffron hover:bg-saffron/90 text-white px-4 rounded-full font-semibold transition hover:scale-105 active:scale-95 flex items-center gap-2 shadow-md shadow-saffron/20 text-sm"
-                >
-                  Subscribe <ArrowRight className="w-4 h-4" />
-                </button>
+              <form className="flex w-full md:w-auto relative mt-4 md:mt-0 flex-col" onSubmit={handleSubscribe}>
+                <div className="relative w-full">
+                  <label htmlFor="newsletter-email" className="sr-only">Email address</label>
+                  <input
+                    id="newsletter-email"
+                    name="newsletter-email"
+                    type="email"
+                    placeholder="Enter your email address"
+                    required
+                    disabled={isSubmitting}
+                    className="w-full md:w-[320px] bg-white dark:bg-black/20 backdrop-blur-md border border-black/10 dark:border-white/10 text-slate-800 dark:text-white pl-5 pr-[110px] py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-saffron/50 focus:border-saffron/50 transition placeholder:text-slate-400 dark:placeholder:text-white/40 shadow-inner text-sm disabled:opacity-50"
+                  />
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="absolute right-1.5 top-1.5 bottom-1.5 bg-saffron hover:bg-saffron/90 text-white px-4 rounded-full font-semibold transition hover:scale-105 active:scale-95 flex items-center gap-2 shadow-md shadow-saffron/20 text-sm disabled:opacity-70 disabled:hover:scale-100"
+                  >
+                    {isSubmitting ? "Wait..." : "Subscribe"} {!isSubmitting && <ArrowRight className="w-4 h-4" />}
+                  </button>
+                </div>
+                {error && <p className="text-red-500 text-xs mt-2 pl-2">{error}</p>}
               </form>
             )}
           </div>

@@ -2,16 +2,18 @@
 
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { Moon, Sun, ChevronDown, Globe, Menu, X } from "lucide-react";
+import { Moon, Sun, ChevronDown, Globe, Menu, X, User, LayoutDashboard, LogOut, Settings } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { usePathname } from "next/navigation";
 import * as m from "motion/react-m";
 import { AnimatePresence } from "motion/react";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 import { useConsultation } from "./consultation-provider";
 
 const navLinks = [
   { name: "Home", href: "/" },
+  { name: "Catalog", href: "/products" },
   { name: "Services", href: "/services" },
   { name: "Modular Kitchens", href: "/modular-kitchens" },
   { name: "Portfolio", href: "/portfolio" },
@@ -30,6 +32,7 @@ const languages = [
 
 export function Header() {
   const { theme, setTheme } = useTheme();
+  const { data: session, status } = useSession();
   // mounted ref avoids the 'state from mount effect' anti-pattern
   const mountedRef = useRef(false);
   const [, forceUpdate] = useState(0);
@@ -37,8 +40,10 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('en');
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
   const langDropdownRef = useRef<HTMLDivElement>(null);
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
   const { openModal } = useConsultation();
   const pathname = usePathname();
 
@@ -46,6 +51,9 @@ export function Header() {
     const handleClickOutside = (event: MouseEvent) => {
       if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
         setLangMenuOpen(false);
+      }
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
+        setProfileMenuOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -162,7 +170,7 @@ export function Header() {
         </nav>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Theme Toggle */}
           {mounted && (
             <button
@@ -220,12 +228,106 @@ export function Header() {
             <div id="google_translate_element" className="hidden"></div>
           </div>
 
+          {/* User Profile / Sign In */}
+          <div className="relative flex items-center" ref={profileDropdownRef}>
+            {status === "loading" ? (
+              <div className="w-9 h-9 rounded-full bg-black/10 dark:bg-white/10 animate-pulse ml-2"></div>
+            ) : session?.user ? (
+              <>
+                <button
+                  onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                  className="flex items-center justify-center w-9 h-9 rounded-full overflow-hidden border-2 border-transparent hover:border-saffron focus:border-saffron focus:outline-none transition-all duration-300 shadow-sm ml-2"
+                >
+                  {session.user.image ? (
+                    <img src={session.user.image} alt="Profile" className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="w-full h-full bg-navy text-white flex items-center justify-center text-sm font-bold">
+                      {session.user.name?.[0]?.toUpperCase() || "U"}
+                    </div>
+                  )}
+                </button>
+                <AnimatePresence>
+                  {profileMenuOpen && (
+                    <m.div
+                      initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 15, scale: 0.95 }}
+                      transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 25 }}
+                      className="absolute top-full mt-3 right-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl rounded-2xl w-64 z-50 flex flex-col overflow-hidden p-1.5"
+                    >
+                      {/* Header */}
+                      <div className="px-3 pt-3 pb-2 mb-1">
+                        <p className="text-[15px] font-bold text-slate-900 dark:text-white truncate tracking-tight">{session.user.name}</p>
+                        <p className="text-[13px] text-slate-500 dark:text-slate-400 truncate">{session.user.email}</p>
+                      </div>
+                      
+                      <div className="h-px bg-slate-100 dark:bg-slate-800 my-1 mx-2" />
+                      
+                      {/* Links */}
+                      <div className="flex flex-col gap-0.5">
+                        <Link 
+                          href="/profile" 
+                          onClick={() => setProfileMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors group"
+                        >
+                          <User className="w-4 h-4 text-slate-400 group-hover:text-saffron transition-colors" />
+                          My Profile
+                        </Link>
+                        
+                        {(session.user as any).role === 'admin' && (
+                          <Link 
+                            href="/admin" 
+                            onClick={() => setProfileMenuOpen(false)}
+                            className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors group"
+                          >
+                            <LayoutDashboard className="w-4 h-4 text-slate-400 group-hover:text-saffron transition-colors" />
+                            Admin Dashboard
+                          </Link>
+                        )}
+                        
+                        <Link 
+                          href="/settings" 
+                          onClick={() => setProfileMenuOpen(false)}
+                          className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors group"
+                        >
+                          <Settings className="w-4 h-4 text-slate-400 group-hover:text-saffron transition-colors" />
+                          Settings
+                        </Link>
+                      </div>
+                      
+                      <div className="h-px bg-slate-100 dark:bg-slate-800 my-1 mx-2" />
+                      
+                      {/* Logout */}
+                      <button
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          signOut();
+                        }}
+                        className="flex items-center gap-3 w-full text-left px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Sign Out
+                      </button>
+                    </m.div>
+                  )}
+                </AnimatePresence>
+              </>
+            ) : (
+              <button
+                onClick={() => signIn("google")}
+                className="hidden sm:inline-flex items-center justify-center whitespace-nowrap text-sm font-semibold transition-all duration-300 hover:bg-black/5 dark:hover:bg-white/5 text-navy dark:text-white px-4 py-2 rounded-full border border-black/10 dark:border-white/10 ml-2"
+              >
+                Sign In
+              </button>
+            )}
+          </div>
+
           {/* CTA Button */}
           <button 
             onClick={openModal}
-            className="hidden sm:inline-flex items-center justify-center whitespace-nowrap font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 py-2 rounded-full bg-navy text-white hover:bg-saffron hover:text-white transition-colors duration-300 shadow-md hover:shadow-lg shadow-navy/20 hover:shadow-saffron/20 px-4 h-9 text-xs sm:px-5 sm:h-10 sm:text-sm"
+            className="hidden md:inline-flex items-center justify-center whitespace-nowrap text-[13px] font-semibold transition-all duration-300 border border-black/10 dark:border-white/10 hover:border-saffron hover:text-saffron dark:hover:border-saffron dark:hover:text-saffron text-navy dark:text-white px-4 py-2 rounded-full bg-white/40 dark:bg-slate-800/40 ml-1"
           >
-            Get Free Consultation
+            Free Consultation
           </button>
 
           {/* Mobile Menu Toggle */}
@@ -265,15 +367,15 @@ export function Header() {
                 })}
               </div>
               <div className="flex flex-col gap-4 px-6 mt-2 pt-4 border-t border-black/10 dark:border-white/10">
-                <button 
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    openModal();
-                  }}
-                  className="w-full py-3 rounded-full bg-navy text-white hover:bg-saffron transition-colors shadow-md text-sm font-semibold"
-                >
-                  Get Free Consultation
-                </button>
+                  <button 
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      openModal();
+                    }}
+                    className="w-full py-3 rounded-full border border-black/10 dark:border-white/10 text-navy dark:text-white hover:border-saffron hover:text-saffron dark:hover:border-saffron dark:hover:text-saffron transition-colors text-sm font-semibold"
+                  >
+                    Free Consultation
+                  </button>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-navy/80 dark:text-slate-300">
                     <span className="text-sm font-semibold">Translation</span>
