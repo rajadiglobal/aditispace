@@ -1,4 +1,7 @@
-﻿CREATE TABLE alembic_version (
+﻿
+CREATE DATABASE IF NOT EXISTS aditi_store;
+use aditi_store;
+CREATE TABLE alembic_version (
     version_num VARCHAR(32) NOT NULL, 
     CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num)
 );
