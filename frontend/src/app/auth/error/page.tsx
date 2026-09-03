@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Authentication Error | Avyron Studio",
+  title: "Authentication Error | Aditi Studio",
 }
 
 interface AuthErrorPageProps {

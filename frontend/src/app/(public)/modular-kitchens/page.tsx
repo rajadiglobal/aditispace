@@ -11,7 +11,7 @@ export default function ModularKitchensPage() {
         imagePath="/images/hero/luxury-kitchen.jpg"
         whatsappAction={{
           text: "Discuss Your Kitchen Project",
-          message: "Hi Avyron Studio! I'm interested in getting a custom Modular Kitchen designed. Can we discuss?"
+          message: "Hi Aditi Studio! I'm interested in getting a custom Modular Kitchen designed. Can we discuss?"
         }}
       />
       <div className="py-12">

@@ -9,7 +9,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # App
-    app_name: str = "Avyron Studio CRM API"
+    app_name: str = "Aditi Studio CRM API"
     debug: bool = True
     
     # CRM Admin

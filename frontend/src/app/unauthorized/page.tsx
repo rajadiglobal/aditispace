@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Access Denied | Avyron Studio",
+  title: "Access Denied | Aditi Studio",
 }
 
 export default function UnauthorizedPage() {
@@ -10,7 +10,7 @@ export default function UnauthorizedPage() {
         <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 12 }}>Access Denied</h1>
         <p style={{ color: "var(--muted-foreground)", fontSize: 15, marginBottom: 28 }}>
           You don&apos;t have permission to access this page. This area is restricted to
-          Avyron Studio administrators.
+          Aditi Studio administrators.
         </p>
         <a
           href="/"

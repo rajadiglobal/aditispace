@@ -4,7 +4,7 @@ Authentication router — /api/v1/auth/
 POST /api/v1/auth/google
     Called by NextAuth.js (Rimesh) after Google OAuth completes.
     Receives the Google id_token, verifies it, upserts the user in DB,
-    and returns an Avyron JWT.
+    and returns an Aditi JWT.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -45,7 +45,7 @@ class AuthResponse(BaseModel):
     summary="Google OAuth Login",
     description=(
         "Verify a Google id_token, upsert the user in the database, "
-        "and return an Avyron JWT access token. "
+        "and return an Aditi JWT access token. "
         "Called by NextAuth.js (Rimesh's implementation)."
     ),
 )
@@ -64,7 +64,7 @@ async def google_auth(
 
     google_id: str = google_info["sub"]
     email: str = google_info.get("email") or payload.email or ""
-    name: str = google_info.get("name") or payload.name or "Avyron User"
+    name: str = google_info.get("name") or payload.name or "Aditi User"
     picture: str | None = google_info.get("picture") or payload.picture
 
     # ── 2. Upsert user in database ────────────────────────────────────────────
@@ -107,7 +107,7 @@ async def google_auth(
     db.commit()
     db.refresh(user)
 
-    # ── 3. Issue Avyron JWT ───────────────────────────────────────────────────
+    # ── 3. Issue Aditi JWT ───────────────────────────────────────────────────
     access_token = create_access_token(
         data={
             "sub": str(user.id),

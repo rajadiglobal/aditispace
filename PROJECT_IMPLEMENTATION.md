@@ -1,12 +1,12 @@
 # PROJECT IMPLEMENTATION
 
-This document provides a detailed overview of the current state of the Avyron Studio project, including its architecture, database, API structure, and feature implementation status as of September 3, 2026.
+This document provides a detailed overview of the current state of the Aditi Studio project, including its architecture, database, API structure, and feature implementation status as of September 3, 2026.
 
 ---
 
 ## 1. PROJECT OVERVIEW
 
-**Purpose:** Avyron Studio is an interior design platform offering a public-facing product catalog, lead capture/consultation capabilities, and an administrative dashboard to manage products, CRM, and site content.
+**Purpose:** Aditi Studio is an interior design platform offering a public-facing product catalog, lead capture/consultation capabilities, and an administrative dashboard to manage products, CRM, and site content.
 
 **Current Architecture:**
 ```text

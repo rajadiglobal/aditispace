@@ -158,8 +158,8 @@ export function ContactSection() {
                 </div>
                 <div>
                   <h4 className="font-semibold mb-1">Email Us</h4>
-                  <a href="mailto:hello@avyron.com" className="text-muted-foreground hover:text-saffron transition-colors">
-                    hello@avyron.com
+                  <a href="mailto:contact@rajadiglobal.com" className="text-muted-foreground hover:text-saffron transition-colors">
+                    contact@rajadiglobal.com
                   </a>
                 </div>
               </div>
@@ -182,7 +182,7 @@ export function ContactSection() {
                 </div>
                 <div>
                   <h4 className="font-semibold mb-1">WhatsApp Us</h4>
-                  <a href="https://wa.me/919110447020?text=Hello!%20I'm%20interested%20in%20Avyron%20Studio's%20services." target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#25D366] transition-colors">
+                  <a href="https://wa.me/919110447020?text=Hello!%20I'm%20interested%20in%20Aditi%20Studio's%20services." target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-[#25D366] transition-colors">
                     Chat with an expert
                   </a>
                 </div>
@@ -197,7 +197,7 @@ export function ContactSection() {
                 src="https://maps.google.com/maps?q=Sector%2046%2C%20Noida&t=&z=13&ie=UTF8&iwloc=&output=embed"
                 width="100%"
                 height="100%"
-                title="Avyron Studio location on Google Maps"
+                title="Aditi Studio location on Google Maps"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 className="absolute inset-0 grayscale hover:grayscale-0 transition-[filter] duration-700"

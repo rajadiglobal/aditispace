@@ -7,7 +7,7 @@ export default function TestimonialsPage() {
       <PageHero 
         title="Client Testimonials" 
         subtitle="WHAT THEY SAY"
-        description="Discover what our clients have to say about their experience working with Avyron Studio and how we transformed their spaces."
+        description="Discover what our clients have to say about their experience working with Aditi Studio and how we transformed their spaces."
         imagePath="/images/hero/luxury-penthouse.jpg"
       />
       <div className="py-8">

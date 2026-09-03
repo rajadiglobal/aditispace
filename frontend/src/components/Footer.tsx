@@ -156,18 +156,8 @@ export function Footer() {
                     Global HQ
                   </div>
                   <p className="pl-6 text-sm leading-relaxed">
-                    124 Luxury Avenue,<br />
-                    Design District, NY 10012
-                  </p>
-                </div>
-                <div className="group">
-                  <div className="flex items-center gap-2 font-semibold text-navy dark:text-white mb-2">
-                    <MapPin className="w-4 h-4 text-saffron group-hover:animate-bounce transition-transform" /> 
-                    London Studio
-                  </div>
-                  <p className="pl-6 text-sm leading-relaxed">
-                    45 Mayfair Square,<br />
-                    London W1J 5QE
+                    B-9, Sector 20,<br />
+                    Noida, UP, India, Pin-201301
                   </p>
                 </div>
               </address>
@@ -193,7 +183,7 @@ export function Footer() {
         {/* Bottom Bar - Copyright and Social Links */}
         <div className="border-t border-black/10 dark:border-white/10 pt-8 pb-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            © {new Date().getFullYear()} Avyron Studio. All rights reserved.
+            Aditi Store is powered by Rajadi Global Private Limited
           </p>
           <div className="flex items-center gap-4">
             <a href="#" aria-label="Follow us on Instagram" className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-navy dark:hover:text-white hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
