@@ -1,5 +1,5 @@
 """
-Avyron Studio CRM — FastAPI application entry point.
+Aditi Studio CRM — FastAPI application entry point.
 
 Registers all routers and global middleware.
 Visit http://localhost:8000/docs for the interactive Swagger UI.
@@ -23,13 +23,104 @@ app = FastAPI(
     title=settings.app_name,
     version="1.0.0",
     description=(
-        "REST API for the Avyron Studio Interior Design CRM Platform. "
+        "REST API for the Aditi Studio Interior Design CRM Platform. "
         "Handles authentication, lead management, worker registration, "
         "and portfolio content."
     ),
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",
+    openapi_tags=[
+        {
+            "name": "authentication",
+            "description": "Google OAuth authentication and JWT issuance.",
+        },
+        {
+            "name": "leads",
+            "description": "Public project-planner submissions and admin CRM lead management.",
+        },
+        {
+            "name": "requirements",
+            "description": "Interior-design requirement submissions and admin updates.",
+        },
+        {
+            "name": "products",
+            "description": "Public product catalog browsing.",
+        },
+        {
+            "name": "admin-products",
+            "description": "Admin product, image, specification, and variant management.",
+        },
+        {
+            "name": "categories",
+            "description": "Public product category browsing.",
+        },
+        {
+            "name": "admin-categories",
+            "description": "Admin product category management.",
+        },
+        {
+            "name": "collections",
+            "description": "Public product collection browsing.",
+        },
+        {
+            "name": "admin-collections",
+            "description": "Admin product collection management.",
+        },
+        {
+            "name": "brands",
+            "description": "Public product brand browsing.",
+        },
+        {
+            "name": "admin-brands",
+            "description": "Admin product brand management.",
+        },
+        {
+            "name": "portfolio",
+            "description": "Published interior-design portfolio items.",
+        },
+        {
+            "name": "projects",
+            "description": "Authenticated project workspace endpoints.",
+        },
+        {
+            "name": "workers",
+            "description": "Worker registration and admin directory management.",
+        },
+        {
+            "name": "upload",
+            "description": "Product image uploads and generated static asset URLs.",
+        },
+        {
+            "name": "dashboard",
+            "description": "Admin dashboard aggregate statistics.",
+        },
+        {
+            "name": "search",
+            "description": "Authenticated global CRM search.",
+        },
+        {
+            "name": "Newsletter",
+            "description": "Newsletter subscription and admin subscriber management.",
+        },
+        {
+            "name": "Contact",
+            "description": "Public contact inquiries and admin status updates.",
+        },
+        {
+            "name": "Consultation",
+            "description": "Consultation requests and admin scheduling workflow.",
+        },
+        {
+            "name": "system",
+            "description": "Service health and API metadata.",
+        },
+    ],
+    swagger_ui_parameters={
+        "docExpansion": "list",
+        "filter": True,
+        "displayRequestDuration": True,
+    },
 )
 
 # ─── CORS Middleware ──────────────────────────────────────────────────────────

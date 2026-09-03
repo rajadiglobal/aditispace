@@ -4,7 +4,7 @@ import GlobalSearch from "@/components/admin/GlobalSearch"
 import Link from "next/link"
 
 export const metadata = {
-  title: "Admin | Avyron Studio CRM",
+  title: "Admin | Aditi Studio CRM",
 }
 
 export default async function AdminLayout({
@@ -102,7 +102,7 @@ export default async function AdminLayout({
       <aside className="w-64 bg-[#0f0f0f] text-white flex flex-col flex-shrink-0 h-screen sticky top-0 overflow-y-auto">
         <div className="p-6 border-b border-[#1f1f1f] sticky top-0 bg-[#0f0f0f] z-10">
           <p className="text-[11px] text-[#888] uppercase tracking-widest mb-1">
-            Avyron Studio
+            Aditi Studio
           </p>
           <Link href="/admin">
             <p className="text-sm font-semibold text-white hover:text-primary transition-colors">CRM Dashboard</p>

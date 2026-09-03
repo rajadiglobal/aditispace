@@ -1,5 +1,5 @@
 """
-Avyron Studio CRM — Backend startup script.
+Aditi Studio CRM — Backend startup script.
 
 Usage:
     cd backend

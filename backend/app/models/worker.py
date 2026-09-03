@@ -1,7 +1,7 @@
 """
 Worker ORM model.
 
-Stores registered contractors / tradespeople who work on Avyron projects.
+Stores registered contractors / tradespeople who work on Aditi projects.
 Workers are verified by admin staff before being assigned to projects.
 """
 

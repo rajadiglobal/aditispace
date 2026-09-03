@@ -7,8 +7,8 @@ interface SignInPageProps {
 }
 
 export const metadata = {
-  title: "Sign In | Avyron Studio",
-  description: "Sign in to your Avyron Studio account",
+  title: "Sign In | Aditi Studio",
+  description: "Sign in to your Aditi Studio account",
 }
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
@@ -52,7 +52,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
               margin: 0,
             }}
           >
-            AVYRON STUDIO
+            ADITI STUDIO
           </h1>
           <p style={{ color: "var(--muted-foreground)", marginTop: 8, fontSize: 14 }}>
             Sign in to continue

@@ -41,11 +41,16 @@ export function Header() {
   const [currentLang, setCurrentLang] = useState('en');
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [profileImageFailed, setProfileImageFailed] = useState(false);
   const headerRef = useRef<HTMLElement | null>(null);
   const langDropdownRef = useRef<HTMLDivElement>(null);
   const profileDropdownRef = useRef<HTMLDivElement>(null);
   const { openModal } = useConsultation();
   const pathname = usePathname();
+
+  useEffect(() => {
+    setProfileImageFailed(false);
+  }, [session?.user?.image]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -142,7 +147,7 @@ export function Header() {
           </div>
           <div className="flex flex-col">
             <span className="font-bold text-lg md:text-xl text-navy dark:text-slate-100 tracking-tight group-hover:text-saffron transition-colors leading-none">
-              AVYRON<span className="text-saffron">.</span>
+              ADITI<span className="text-saffron">.</span>
             </span>
             <span className="text-[10px] md:text-xs font-semibold text-navy/60 dark:text-slate-400 tracking-wider uppercase mt-0.5 md:mt-1 group-hover:text-saffron/80 transition-colors">
               Luxury Interiors
@@ -238,8 +243,14 @@ export function Header() {
                   onClick={() => setProfileMenuOpen(!profileMenuOpen)}
                   className="flex items-center justify-center w-9 h-9 rounded-full overflow-hidden border-2 border-transparent hover:border-saffron focus:border-saffron focus:outline-none transition-all duration-300 shadow-sm ml-2"
                 >
-                  {session.user.image ? (
-                    <img src={session.user.image} alt="Profile" className="w-full h-full object-cover" />
+                  {session.user.image && !profileImageFailed ? (
+                    <img
+                      src={session.user.image}
+                      alt="Profile"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover"
+                      onError={() => setProfileImageFailed(true)}
+                    />
                   ) : (
                     <div className="w-full h-full bg-navy text-white flex items-center justify-center text-sm font-bold">
                       {session.user.name?.[0]?.toUpperCase() || "U"}
@@ -414,4 +425,3 @@ export function Header() {
     </div>
   );
 }
-

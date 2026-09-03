@@ -9,7 +9,7 @@ export function WhatsAppWidget() {
   const [isVisible, setIsVisible] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const phoneNumber = "919110447020";
-  const defaultMessage = encodeURIComponent("Hello! I'm interested in Avyron Studio's services. Can we connect?");
+  const defaultMessage = encodeURIComponent("Hello! I'm interested in Aditi Studio's services. Can we connect?");
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${defaultMessage}`;
 
   useEffect(() => {

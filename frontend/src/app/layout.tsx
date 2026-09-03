@@ -16,7 +16,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "AVYRON STUDIO | Luxury Interior Design",
+  title: "ADITI STUDIO | Luxury Interior Design",
   description: "Luxury interiors crafted for modern living.",
 };
 

@@ -174,7 +174,7 @@ export default function WorkerRegisterPage() {
             Register as a Worker
           </h1>
           <p style={{ color: "var(--muted-foreground)", fontSize: 15 }}>
-            Join the Avyron Studio network of verified craftspeople and interior contractors.
+            Join the Aditi Studio network of verified craftspeople and interior contractors.
           </p>
         </div>
 
